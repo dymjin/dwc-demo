@@ -1,0 +1,10 @@
+import Controller from "./Controller.mjs";
+import View from "./View.mjs";
+import Model from "./Model.mjs";
+import DWCjson from "./DWC.json";
+import { library, dom } from "@fortawesome/fontawesome-svg-core";
+import { fab } from "@fortawesome/free-brands-svg-icons";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+library.add(fab, fas);
+dom.watch();
+new Controller(new Model(DWCjson), new View());
