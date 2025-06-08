@@ -30,9 +30,8 @@
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
-    "choices.js": "^11.1.0",
-    "fuse.js": "^7.1.0",
     "micromodal": "^0.6.1",
-    "swiper": "^11.2.8"
+    "swiper": "^11.2.8",
+    "tom-select": "^2.4.3"
   }
 }

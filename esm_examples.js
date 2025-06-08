@@ -105,6 +105,21 @@ MicroModal.init();
 //     </div>
 //   </div>
 // </div>
+
+// *****
+// CSS
+// *****
+// .swiper-slide {
+//   height: 500px !important;
+//   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+//     url("./../imgs/ballet/ballet_studio_center_focus_700w.jpg") center / cover
+//       no-repeat fixed white;
+// }
+
+// .swiper-title {
+//   margin-block: auto;
+// }
+
 import Swiper from "swiper";
 import { /*Navigation,*/ Pagination, Zoom } from "swiper/modules";
 // import Swiper and modules styles
@@ -148,21 +163,21 @@ const swiper = new Swiper(".swiper", {
 // *****
 // HTML example
 // <select name="test" id="choices-select"></select>
-import Choices from "choices.js";
-import "choices.js/public/assets/styles/choices.css";
-// Pass single element
-const element = document.querySelector("#choices-select");
-// const choices = new Choices(element);
+// import Choices from "choices.js";
+// import "choices.js/public/assets/styles/choices.css";
+// // Pass single element
+// const element = document.querySelector("#choices-select");
+// // const choices = new Choices(element);
 
-// Pass reference
-//   const choices = new Choices('[data-trigger]');
-//   const choices = new Choices('.js-choice');
+// // Pass reference
+// //   const choices = new Choices('[data-trigger]');
+// //   const choices = new Choices('.js-choice');
 
-// Passing options (with default options)
-const choices = new Choices(element, {}).setValue([
-  "Set value 1",
-  "Set value 2",
-]);
+// // Passing options (with default options)
+// const choices = new Choices(element, {}).setValue([
+//   "Set value 1",
+//   "Set value 2",
+// ]);
 
 // *****
 // Masonry

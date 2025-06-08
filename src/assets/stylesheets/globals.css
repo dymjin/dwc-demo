@@ -1,0 +1,440 @@
+@charset "UTF-8";
+
+/************* 
+* FONT FACES *
+**************/
+@font-face {
+  font-display: swap;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Inter Regular"), local("Inter-Regular"),
+    url("./../fonts/inter/inter-regular-webfont.woff2") format("woff2"),
+    url("./../fonts/inter/inter-regular-webfont.woff") format("woff");
+}
+/* @font-face {
+  font-display: swap;
+  font-family: "Lucida Handwriting";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Lucida Handwriting"), local("Lucida-Handwriting"),
+    url("/assets/fonts/final/lhandw-webfont.woff2") format("woff2"),
+    url("/assets/fonts/final/lhandw-webfont.woff") format("woff");
+} */
+/* @font-face {
+  font-display: swap;
+  font-family: "MV Boli";
+  font-style: normal;
+  font-weight: normal;
+  src: local("MV Boli"), local("MV-Boli"),
+    url("/assets/fonts/final/mvboli-webfont.woff2") format("woff2"),
+    url("/assets/fonts/final/mvboli-webfont.woff") format("woff");
+} */
+
+/* Playfair */
+@font-face {
+  font-family: "Playfair";
+  src: url("./../fonts/playfair/Playfair144pt-Bold.woff2") format("woff2"),
+    url("./../fonts/playfair/Playfair144pt-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Playfair";
+  src: url("./../fonts/playfair/Playfair144pt-BoldItalic.woff2") format("woff2"),
+    url("./../fonts/playfair/Playfair144pt-BoldItalic.woff") format("woff");
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Playfair";
+  src: url("./../fonts/playfair/Playfair144pt-Italic.woff2") format("woff2"),
+    url("./../fonts/playfair/Playfair144pt-Italic.woff2") format("woff");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Playfair";
+  src: url("./../fonts/playfair/Playfair144pt-Regular.woff2") format("woff2"),
+    url("./../fonts/playfair/Playfair144pt-Regular.woff2") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /********
+  Colors
+  ********/
+  /* Light/Dark  */
+  --color-light-50: #f9fafb;
+  --color-light-100: #f3f4f6;
+  --color-light-200: #e5e7eb;
+  --color-light-300: #d1d5dc;
+  --color-light-400: #99a1af;
+  --color-dark-600: #4a5565;
+  --color-dark-950: #030712;
+  --color-dark-900: #101828;
+  /* Primary */
+  --color-primary-500: #f6339a;
+  --color-primary-600: #e60076;
+  --color-primary-700: #c6005c;
+  /* State */
+  /* --color-error: #fb2c36; */
+  --color-warning: #ee9900;
+  /* --color-success: #55dd00; */
+  /* Color Utils */
+  --color-links: inherit;
+  --color-selection-bg: var(--color-primary-600);
+  --color-selection-text: var(--color-dark-950);
+  --color-disabled: var(--color-dark-600);
+
+  /********
+  Font
+  ********/
+  /* Family */
+  --font-family-base: "Inter", Segoe UI, Roboto, Helvetica Neue, Arial,
+    sans-serif;
+  --font-family-accent: var(--font-family-base);
+  --font-family-display: "Playfair", "Times New Roman",
+    Helvetica Neue sans-serif;
+  /* Weight */
+  --font-weight-base: 400;
+  --font-weight-accent: 500;
+  --font-weight-display: 700;
+  --font-weight-bold: 700;
+
+  /********
+  Typesetting
+  ********/
+  /* Incremental scale */
+  --step--1: clamp(0.8333rem, 0.7857rem + 0.2381vw, 1rem);
+  --step-0: clamp(1rem, 0.9286rem + 0.3571vw, 1.25rem);
+  --step-1: clamp(1.2rem, 1.0964rem + 0.5179vw, 1.5625rem);
+  --step-2: clamp(1.44rem, 1.2934rem + 0.733vw, 1.9531rem);
+  --step-3: clamp(1.728rem, 1.5242rem + 1.0192vw, 2.4414rem);
+  --step-4: clamp(2.0736rem, 1.7941rem + 1.3974vw, 3.0518rem);
+  --step-5: clamp(2.4883rem, 2.1094rem + 1.8948vw, 3.8147rem);
+  --step-6: clamp(2.986rem, 2.4767rem + 2.5463vw, 4.7684rem);
+  --step-7: clamp(3.5832rem, 2.904rem + 3.3961vw, 5.9605rem);
+  --step-8: clamp(4.2998rem, 3.3996rem + 4.5011vw, 7.4506rem);
+  --step-9: clamp(5.1598rem, 3.9731rem + 5.9335vw, 9.3132rem);
+
+  /* Text sizing */
+  --text-size-base: var(--step-0);
+  /* Headings (h1, h2, h3, h4) */
+  --text-size-heading-1: var(--step-5);
+  --text-size-heading-2: var(--step-4);
+  --text-size-heading-3: var(--step-3);
+  --text-size-heading-4: var(--step-2);
+  /* Custom */
+  /* --fs-step-48-96: clamp(3rem, 1.9565rem + 5.2174vw, 6rem); */
+
+  /********
+  Spacing
+  ********/
+  /* Incremental scale */
+  --space-3xs: clamp(0.3125rem, 0.3125rem + 0vw, 0.3125rem);
+  --space-2xs: clamp(0.5625rem, 0.5408rem + 0.1087vw, 0.625rem);
+  --space-xs: clamp(0.875rem, 0.8533rem + 0.1087vw, 0.9375rem);
+  --space-s: clamp(1.125rem, 1.0815rem + 0.2174vw, 1.25rem);
+  --space-m: clamp(1.6875rem, 1.6223rem + 0.3261vw, 1.875rem);
+  --space-l: clamp(2.25rem, 2.163rem + 0.4348vw, 2.5rem);
+  --space-xl: clamp(3.375rem, 3.2446rem + 0.6522vw, 3.75rem);
+  --space-2xl: clamp(4.5rem, 4.3261rem + 0.8696vw, 5rem);
+  --space-3xl: clamp(6.75rem, 6.4891rem + 1.3043vw, 7.5rem);
+  /* Pairs */
+  --space-3xs-2xs: clamp(0.3125rem, 0.2038rem + 0.5435vw, 0.625rem);
+  --space-2xs-xs: clamp(0.5625rem, 0.4321rem + 0.6522vw, 0.9375rem);
+  --space-xs-s: clamp(0.875rem, 0.7446rem + 0.6522vw, 1.25rem);
+  --space-s-m: clamp(1.125rem, 0.8641rem + 1.3043vw, 1.875rem);
+  --space-m-l: clamp(1.6875rem, 1.4049rem + 1.413vw, 2.5rem);
+  --space-l-xl: clamp(2.25rem, 1.7283rem + 2.6087vw, 3.75rem);
+  --space-xl-2xl: clamp(3.375rem, 2.8098rem + 2.8261vw, 5rem);
+  --space-2xl-3xl: clamp(4.5rem, 3.4565rem + 5.2174vw, 7.5rem);
+  /* Custom pairs */
+  --space-s-l: clamp(1.125rem, 0.6467rem + 2.3913vw, 2.5rem);
+  /* Spacing utils */
+  --gutter: var(--space-s);
+  --gutter-s: var(--space-xs);
+  --gutter-l: var(--space-l);
+  --region-space: var(--space-2xl);
+
+  /********
+  Sizing
+  ********/
+  /* Size limits */
+  --limited-width: 2rem;
+  --limited-height: 2rem;
+  /* Wrappers */
+  --wrapper-max-width: 1200px;
+  --narrow-wrapper-max-width: 1000px;
+  /* Miscellaneous */
+  --cart-w-500-400: clamp(25rem, 33.4239rem + -10.8696vw, 31.25rem);
+  /* --products-w-250-400: clamp(15.625rem, 12.3641rem + 16.3043vw, 25rem); */
+  /* --products-col-w-120-200: clamp(7.5rem, 5.7609rem + 8.6957vw, 12.5rem); */
+  --header-h: 4.5rem;
+  /* --featured-item-size-320-410: clamp(20rem, 18.0435rem + 9.7826vw, 25.625rem); */
+
+  /********
+  Border
+  ********/
+  /* Radius */
+  --radius: 0.75rem;
+  --radius-l: 2rem;
+  --radius-m: 1rem;
+  --radius-s: 0.25rem;
+
+  /********
+  Interaction
+  ********/
+  /* Focus */
+  --focus-ring: 2px solid var(--color-primary-500);
+  --focus-ring-offset: 2px;
+  /* Target */
+
+  /********
+  Transitions
+  ********/
+  --transition-base: 250ms ease;
+  --transition-movement: 200ms linear;
+  --transition-fade: 200ms ease;
+  --transition-bounce: 500ms cubic-bezier(0.5, 0.05, 0.2, 1.5);
+  --transition-drawer: 0.6s cubic-bezier(0.75, 0, 0.175, 1);
+
+  /********
+  Scrollbar
+  ********/
+  --scrollbar-width: 0px;
+}
+
+/********
+Reset
+********/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure,
+blockquote,
+dl,
+dd,
+pre {
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+}
+
+ul[class],
+ol[class] {
+  list-style: none;
+  margin-block: 0;
+  padding: 0;
+}
+
+img,
+picture {
+  height: auto;
+  max-width: 100%;
+  display: block;
+}
+
+li img,
+p img {
+  display: inline-block;
+  vertical-align: sub;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  letter-spacing: inherit;
+  word-spacing: inherit;
+}
+
+/* Niche resets */
+[type="search"]::-webkit-search-cancel-button {
+  display: none;
+}
+
+dialog {
+  margin: 0;
+  padding: 0;
+}
+
+/********
+Global Styles
+********/
+/* Core elements */
+html {
+  visibility: visible;
+  opacity: 1;
+  scroll-behavior: smooth;
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-light-50);
+  color: var(--color-dark-950);
+  font-size: var(--text-size-base);
+  font-family: var(--font-family-base);
+  line-height: 1.5;
+  text-rendering: optimizeSpeed;
+}
+
+body:has(dialog[open]) {
+  overflow: hidden;
+}
+
+.scroller {
+  height: 100vh;
+  width: 100%;
+  overflow: auto;
+  scroll-behavior: smooth;
+}
+
+/* Queries */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01s !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1;
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+h1 {
+  font-size: var(--text-size-heading-1);
+}
+
+h2 {
+  font-size: var(--text-size-heading-2);
+}
+
+h3 {
+  font-size: var(--text-size-heading-3);
+}
+
+h4,
+h5,
+h6 {
+  font-size: var(--text-size-heading-4);
+}
+
+/* Images */
+
+/* Interactive */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+  text-decoration-thickness: from-font;
+}
+
+a[data-variant="naked"] {
+  text-decoration: none;
+}
+
+a[data-variant="naked"]:hover {
+  text-decoration: underline;
+}
+
+:focus {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+@supports selector(:focus-visible) {
+  :focus {
+    outline: none;
+  }
+
+  :focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-ring-offset);
+  }
+}
+
+::selection {
+  color: var(--color-selection-text);
+  background: var(--color-selection-bg);
+}
+
+:target {
+  scroll-margin-block: var(--space-3xl);
+}
+
+/* Svg */
+svg {
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.branding {
+  /* ballet woman silhouette link: https://www.freepik.com/free-vector/ballet-flat-banners-set_4343488.htm#fromView=search&page=9&position=18&uuid=8c4bce8c-b200-462b-8186-6d2c15058e68&query=ballerina+Silhouettes+Svg  */
+  user-select: none;
+  color: inherit;
+  display: flex;
+  height: calc(var(--header-h) - 10px);
+  transition: transform var(--transition-base), color var(--transition-base);
+}
+
+.branding:hover,
+.branding:focus {
+  transform: scale(1.1);
+}
+
+/* Forms */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+input:disabled {
+  background: var(--color-disabled);
+}
+
+input:disabled,
+label input:disabled + * {
+  cursor: not-allowed;
+}
+
+textarea:not([rows]) {
+  min-height: 10em;
+}

@@ -3,22 +3,50 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>DWC Demo</title>
+    <title>Dance Demo</title>
+    <meta name="description" content="" />
 
-    <meta property="og:title" content="DWC" />
-    <meta property="og:type" content="website" />
-    <!-- <meta property="og:url" content="www.dancewearwc.com" /> -->
-    <meta
-      property="og:image"
-      content="./assets/imgs/DWC_logo_active_vibrant.svg"
-    />
+    <meta property="og:title" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
 
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/icon.png" />
+    <link rel="apple-touch-icon" href="icon.png" />
 
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="manifest" href="site.webmanifest" />
     <meta name="theme-color" content="#fafafa" />
+
+    <style type="text/css">
+      /* html { */
+      /* visibility: hidden; */
+      /* opacity: 0; */
+      /* transition: 2s ease-in-out; */
+      /* } */
+    </style>
+
+    <link href="assets/font-awesome/css/fontawesome.css" rel="stylesheet" />
+    <link href="assets/font-awesome/css/brands.css" rel="stylesheet" />
+    <link href="assets/font-awesome/css/solid.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="src/stylesheets/reset.css" />
+    <link rel="stylesheet" href="src/stylesheets/globals.css" />
+    <link rel="stylesheet" href="src/stylesheets/utils.css" />
+    <link rel="stylesheet" href="src/stylesheets/screen_layouts.css" />
+
+    <link rel="stylesheet" href="src/stylesheets/page_header.css" />
+
+    <link rel="stylesheet" href="src/stylesheets/main.css" />
+
+    <link rel="stylesheet" href="src/stylesheets/welcome.css" />
+    <link rel="stylesheet" href="src/stylesheets/products.css" />
+    <link rel="stylesheet" href="src/stylesheets/about.css" />
+    <link rel="stylesheet" href="src/stylesheets/contact.css" />
+
+    <link rel="stylesheet" href="src/stylesheets/footer.css" />
+
+    <link rel="stylesheet" href="src/stylesheets/cart.css" />
 
     <svg
       data-variant="symbols"
@@ -64,6 +92,14 @@
         </g>
       </symbol>
     </svg>
+    <!-- <noscript>
+      <link rel="stylesheet" href="src/stylesheets/no.css" />
+      <div class="noscript-text">
+        This site uses Javascript for most functionality. Please enable
+        Javascript.
+      </div>
+    </noscript> -->
+    <script type="module" src="src/main.js"></script>
   </head>
   <body>
     <div class="scroller" data-scroller>
@@ -75,12 +111,13 @@
                 class="button"
                 title="Open side menu"
                 data-variant="open-sidenav"
-                data-micromodal-trigger="sidenav"
+                data-open-modal
+                data-modal-rel="sidenav"
                 data-mobile-only
               >
                 <i class="fa-solid fa-bars"></i>
               </button>
-              <a class="branding" href="#welcome">
+              <a class="branding" href="#">
                 <svg>
                   <use href="#site-logo"></use>
                 </svg>
@@ -120,9 +157,10 @@
                 class="button"
                 title="Cart"
                 data-variant="open-cart"
-                data-micromodal-trigger="cart"
+                data-open-modal
+                data-modal-rel="cart"
               >
-                <i class="fas fa-shopping-cart"> </i>
+                <i class="fa-solid fa-shopping-cart"> </i>
               </button>
             </div>
           </nav>
@@ -130,6 +168,7 @@
       </header>
       <main>
         <section id="welcome" class="welcome" data-section>
+          <select data-js-example-select></select>
           <div
             class="wrapper region flow | text-center"
             style="--flow-space: 2.5rem"
@@ -145,13 +184,115 @@
           </div>
         </section>
         <section id="products" class="products" data-section>
-          <!-- <div class="wrapper region flow" data-flush="top"> -->
-          <!-- <p class="w-full text-center">
+          <!-- <article class="slider" data-slider data-variant="category">
+            <div class="slides" data-slides>
+              <div data-prev-slide></div>
+              <div class="current-slide" data-current-slide></div>
+              <div data-next-slide></div>
+            </div>
+            <div class="slider-controls">
+              <button class="button" data-slider-prev>
+                <i class="fa-solid fa-arrow-left"></i>
+              </button>
+              <button class="button" data-slider-next>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </article> -->
+          <div class="wrapper region flow" data-flush="top">
+            <!--    style="
+              --wrapper-max-width: 100rem;
+              --wrapper-space: var(--space-m-l);
+            " -->
+            <!-- <article data-test-dropdown>
+              <details>
+                <summary>test</summary>
+                <div data-color-list>
+                  <div data-color></div>
+                  <div data-color></div>
+                  <div data-color></div>
+
+                  <div data-color></div>
+                </div>
+              </details>
+            </article> -->
+            <div id="searchbar" class="product-search-controls">
+              <form class="searchbar-form" data-products-searchbar-form>
+                <label for="products-searchbar" class="visually-hidden"
+                  >Search products:</label
+                >
+                <button type="submit" class="button" data-variant="search">
+                  <i class="fa-solid fa-search"></i>
+                </button>
+                <input
+                  class="searchbar-input"
+                  style="
+                    --focus-ring-offset: 2px;
+                    --input-padding-block: var(--space-s);
+                    --input-background: var(--color-light-50);
+                    --input-border-color: var(--color-light-300);
+                    --input-border-width: 2px;
+                  "
+                  value=""
+                  type="search"
+                  name="product_search"
+                  id="products-searchbar"
+                  placeholder="Search products"
+                  autocomplete="off"
+                  required
+                />
+              </form>
+              <div>
+                <!-- <select
+                  style="
+                    --focus-ring-offset: 2px;
+                    --input-padding-block: var(--space-s);
+                    --input-padding-inline: var(--space-s) var(--space-l);
+                    --input-background: var(--color-light-50);
+                    --input-border-color: var(--color-light-300);
+                    --input-border-width: 2px;
+                    --input-radius: var(--radius);
+                  "
+                  name="filter_flags"
+                  id="filter-flags"
+                >
+                  <option value="popular">Popular</option>
+                </select> -->
+                <button
+                  type="button"
+                  class="button"
+                  data-variant="open-product-filters"
+                  data-open-modal
+                  data-modal-rel="product-filters"
+                >
+                  <i class="fa-solid fa-filter"></i>
+                  <span>Filters</span>
+                </button>
+              </div>
+            </div>
+
+            <p class="w-full text-center">
               Showing <span data-product-count>all</span> products
               (<span>6</span>)
-            </p> -->
-          <!-- <div> -->
-          <!-- <ul
+            </p>
+            <article class="product-page-scroller" data-product-page-scroller>
+              <button data-first-page>
+                <i class="fa-solid fa-angles-left"></i>
+              </button>
+              <button data-prev-page>
+                <i class="fa-solid fa-angle-left"></i>
+              </button>
+              <div data-current-index="0">1</div>
+              <button data-next-page>
+                <i class="fa-solid fa-angle-right"></i>
+              </button>
+              <button data-last-page>
+                <i class="fa-solid fa-arrow-right-long"></i>
+              </button>
+            </article>
+            <div>
+              <h1 class="text-center w-full">Featured Products</h1>
+              <ul
                 class="featured-products | reel"
                 style="
                   --reel-item-width: calc(
@@ -160,95 +301,68 @@
                   --flow-space: 2rem;
                 "
                 data-featured-list
-              ></ul> -->
-          <!-- </div> -->
-          <!-- <ul class="products-list" data-products-list></ul> -->
-          <!-- <h1 class="text-center w-full">Browse our products</h1> -->
-          <div class="swiper">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide">
-                <h1 class="swiper-title">Title 1</h1>
-                <button>View</button>
-              </div>
-              <div class="swiper-slide">
-                <h1 class="swiper-title">Title 1</h1>
-                <button>View</button>
-              </div>
-              <div class="swiper-slide">
-                <h1 class="swiper-title">Title 1</h1>
-                <button>View</button>
-              </div>
-              <div class="swiper-slide">
-                <h1 class="swiper-title">Title 1</h1>
-                <button>View</button>
-              </div>
+              ></ul>
             </div>
-          </div>
-
-          <div id="searchbar" class="product-search-controls">
-            <form class="searchbar-form" data-products-searchbar-form>
-              <label for="products-searchbar" class="visually-hidden"
-                >Search products:</label
-              >
-              <button type="submit" class="button" data-variant="search">
-                <i class="fa-solid fa-search"></i>
+            <ul class="products-list" data-products-list></ul>
+            <article class="product-page-scroller" data-product-page-scroller>
+              <button data-first-page>
+                <i class="fa-solid fa-arrow-left-long"></i>
               </button>
+              <button data-prev-page>
+                <i class="fa-solid fa-angle-left"></i>
+              </button>
+              <div data-current-index="0">1</div>
+              <button data-next-page>
+                <i class="fa-solid fa-angle-right"></i>
+              </button>
+              <button data-last-page>
+                <i class="fa-solid fa-arrow-right-long"></i>
+              </button>
+            </article>
+          </div>
+          <!-- <div class="filter-btns">
+                <button class="show-filters">
+                  <i class="fa-solid fa-filter"></i>
+                  <span>Filter options</span>
+                </button>
+                <button class="clear-filters">
+                  <i class="fa-solid fa-trash"></i>
+                  <span>Clear filters</span>
+                </button>
+              </div> -->
+          <!-- <div id="product-filters">
+                <div class="filter-container">
+                  <i class="fa-solid fa-filter"></i>
+                  <select name="filter-by-type" id="filter-option">
+                    <option value="" hidden disabled selected>
+                      Filter by type
+                    </option>
+                  </select>
+                </div>
+                <div class="filter-container">
+                  <i class="fa-solid fa-filter"></i>
+                  <select name="filter-by-material" id="filter-option">
+                    <option value="" hidden disabled selected>
+                      Filter by material
+                    </option>
+                  </select>
+                </div>
+                <div class="filter-container">
+                  <i class="fa-solid fa-filter"></i>
+                  <select name="filter-by-theme" id="filter-option">
+                    <option value="" hidden disabled selected>
+                      Filter by theme
+                    </option>
+                  </select>
+                </div>
+              </div>
               <input
-                class="searchbar-input"
-                style="
-                  --focus-ring-offset: 2px;
-                  --input-padding-block: var(--space-s);
-                  --input-background: var(--color-light-50);
-                  --input-border-color: var(--color-light-300);
-                  --input-border-width: 2px;
-                "
-                value=""
                 type="search"
-                name="product_search"
-                id="products-searchbar"
-                placeholder="Search products"
+                class="filter-search-input"
+                placeholder="Filter products"
                 autocomplete="off"
-                required
-              />
-            </form>
-            <div>
-              <button
-                type="button"
-                class="button"
-                data-variant="open-product-filters"
-                data-micromodal-trigger="filters"
-              >
-                <i class="fa-solid fa-filter"></i>
-              </button>
-              <!-- <select name="test" id="choices-select"></select> -->
-            </div>
-          </div>
-          <div class="product-slider w-full" data-hidden="true">
-            <div
-              class="product product-wrapper"
-              data-id="RAD TP01"
-              data-micromodal-trigger="product"
-            >
-              <img src="./assets/imgs/20230711_122524.jpg" alt="" />
-              <h2>Product 1</h2>
-              <p>R30 - R100</p>
-            </div>
-            <div class="product-wrapper">
-              <img src="./assets/imgs/20230711_122524.jpg" alt="" />
-              <h2>Product 1</h2>
-              <p>R30 - R100</p>
-            </div>
-            <div class="product-wrapper">
-              <img src="./assets/imgs/20230711_122524.jpg" alt="" />
-              <h2>Product 1</h2>
-              <p>R30 - R100</p>
-            </div>
-            <div class="product-wrapper">
-              <img src="./assets/imgs/20230711_122524.jpg" alt="" />
-              <h2>Product 1</h2>
-              <p>R30 - R100</p>
-            </div>
-          </div>
+              /> -->
+          <!-- </div> -->
         </section>
         <section id="about" class="about" data-section data-about-section>
           <div class="wrapper region flow">
@@ -417,11 +531,7 @@
         <div class="wrapper region flow">
           <div class="grid" data-layout="50-50">
             <nav>
-              <a class="branding" href="#">
-                <svg>
-                  <use href="#site-logo"></use>
-                </svg>
-              </a>
+              <a class="branding" href="#"></a>
               <ul>
                 <li>
                   <a href="#"> Home </a>
@@ -443,303 +553,262 @@
             <div class="socials">
               Socials
               <div>
-                <a href=""><i class="fab fa-whatsapp"></i></a
-                ><a href=""><i class="fab fa-facebook"></i></a
-                ><a href=""><i class="fab fa-instagram"></i></a
-                ><a href=""><i class="fab fa-x-twitter"></i></a
-                ><a href=""><i class="fab fa-telegram"></i></a>
+                <a href=""><i class="fa-brands fa-whatsapp"></i></a
+                ><a href=""><i class="fa-brands fa-facebook"></i></a
+                ><a href=""><i class="fa-brands fa-instagram"></i></a
+                ><a href=""><i class="fa-brands fa-x-twitter"></i></a
+                ><a href=""><i class="fa-brands fa-telegram"></i></a>
               </div>
             </div>
           </div>
         </div>
       </footer>
-      <!-- MODALS -->
-      <!-- cart -->
-      <div
-        class="modal micromodal-slide"
-        id="cart"
-        aria-hidden="true"
-        data-drawer-dir="right"
+      <!-- TODO: turn into lightbox modal using anchor tag -->
+      <!-- credit to Ivan Ilchenko for the item modal design https://dribbble.com/shots/16469717-Furniture-showcase-Mobile-interface -->
+      <dialog
+        class="product-item-modal | modal"
+        data-product-item-modal
+        data-modal
       >
-        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
-          <div
-            class="modal__container"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="Cart modal"
-          >
-            <div class="cart__wrapper">
-              <header class="repel" data-nowrap>
-                <div class="repel" data-nowrap>
-                  <h1>My cart</h1>
-                  <span class="total-cart-items" data-total-cart-items>0</span>
-                </div>
-                <form method="dialog">
-                  <button class="button" data-micromodal-close="cart">
-                    <i class="fa-solid fa-xmark"></i>
-                  </button>
-                </form>
-              </header>
-              <ul class="flow" data-cart-items>
-                <p>No items currently in cart</p>
-                <div class="cart-item repel" data-nowrap>
-                  <img src="./assets/imgs/20230711_122524.jpg" alt="" />
-                  <div>
-                    <h2>Cart item</h2>
-                    <div class="item__price">
-                      R<span data-cart-item-price>1240.30</span>
-                    </div>
-                    <button class="button">[COLOR PICKER]</button>
-                    <!-- <label for="select-1">Size</label> -->
-                    <select name="test" id="select-1">
-                      <option value="" disabled selected hidden>Size</option>
-                      <option value="test">12cm</option>
-                      <option value="test">Adult</option>
-                      <option value="test">Age 10 to 2</option>
-                    </select>
-                  </div>
-                  <label for="qty">Qty</label>
-                  <input id="qty" type="number" value="2" />
-                </div>
-              </ul>
-              <footer class="flow">
-                <div class="subtotal | repel" data-nowrap>
-                  <div class="subtotal__text">
-                    <h2>Subtotal</h2>
-                    <span>(excluding VAT)</span>
-                  </div>
-                  <div class="subtotal__price">
-                    R<span data-cart-subtotal>0</span>
-                  </div>
-                </div>
-                <div class="flow repel" data-nowrap>
-                  <button
-                    class="button | w-full"
-                    data-variant="checkout"
-                    title="Proceed to checkout"
-                    data-open-modal
-                    data-modal-link="checkout"
-                  >
-                    <i class="fa-solid fa-triangle-exclamation"></i>Checkout
-                  </button>
-                  <button
-                    class="button"
-                    data-clear-cart
-                    data-variant="empty-cart"
-                    title="Clear all items"
-                    data-micromodal-trigger="empty-cart"
-                  >
-                    <i class="fas fa-trash"></i>
-                  </button>
-                </div>
-              </footer>
+        <div>
+          <header class="repel" data-nowrap>
+            <form method="dialog">
+              <button class="button" data-variant="close-modal">
+                <i class="fa-solid fa-angle-left"></i>
+              </button>
+            </form>
+          </header>
+          <button class="button" data-variant="magnify-img" data-magnify-img>
+            <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+          </button>
+          <div class="item-modal__widgets">
+            <!-- <select name="" data-clr-select></select> -->
+            <article data-color-widget>
+              <button data-current-color></button>
+              <div data-color-list></div>
+            </article>
+            <!-- <div class="size-widget"></div> -->
+            <details data-color-widget>
+              <summary data-current-size></summary>
+              <!-- <button data-current-color></button> -->
+              <!-- <div data-color-list></div> -->
+            </details>
+            <!-- <select name="" data-size-select></select> -->
+            <input
+              type="text"
+              value="1"
+              maxlength="2"
+              inputmode="numeric"
+              data-product-modal-qty
+            />
+          </div>
+          <article data-carousel></article>
+          <div class="item-modal__content flow">
+            <div data-title></div>
+            <div data-price></div>
+            <p data-description></p>
+            <div class="item-modal-view-details">
+              View details <i class="fa-solid fa-angle-down"></i>
+            </div>
+            <!-- <div class="item-modal-details">
+              <div class="item-modal-categories"></div>
+            </div> -->
+            <div>
+              <button
+                class="button"
+                data-variant="add-to-cart"
+                data-add-to-cart
+              >
+                Add to cart
+              </button>
+              <button
+                class="button"
+                data-variant="open-cart"
+                data-open-modal
+                data-modal-rel="cart"
+              >
+                <i class="fa-solid fa-cart-shopping"></i>
+              </button>
             </div>
           </div>
         </div>
-      </div>
-      <div class="modal micromodal-slide" id="empty-cart" aria-hidden="true">
-        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
-          <div
-            class="modal__container"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="WARNING, empty cart"
-          >
-            <div>
-              <header class="repel" data-nowrap>
-                <i class="fas fa-warning"></i>
-                <h1>WARNING</h1>
-              </header>
-              <p>Are you sure you want to delete all items from cart?</p>
-              <footer>
-                <button
-                  data-variant="clear-cart"
-                  class="button"
-                  data-micromodal-close
-                >
-                  Clear
-                  <!-- <i class="fa-solid fa-xmark"></i> -->
-                </button>
-                <button
-                  data-variant="cancel-empty-cart"
-                  class="button"
-                  data-micromodal-close
-                >
-                  Cancel
-                  <!-- <i class="fa-solid fa-xmark"></i> -->
-                </button>
-              </footer>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- cart -->
-      <div class="modal micromodal-slide" id="sidenav" aria-hidden="true">
-        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
-          <div
-            class="modal__container"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="sidenav modal"
-          >
-            <div>
-              <header class="sidenav-header | repel" data-nowrap>
-                <a class="branding" href="#" data-sidenav-branding>
-                  <svg>
-                    <use href="#site-logo"></use>
-                  </svg>
+      </dialog>
+      <!-- MODALS -->
+      <dialog class="checkout__modal flyout" data-checkout-modal data-modal>
+        <form method="dialog"></form>
+      </dialog>
+      <dialog
+        class="sidenav-modal | flyout modal flow"
+        data-sidenav-modal
+        data-modal
+        data-direction="ltr"
+      >
+        <div>
+          <header class="sidenav-header | repel" data-nowrap>
+            <a class="branding" href="#" data-sidenav-branding>
+              <svg>
+                <use href="#site-logo"></use>
+              </svg>
+            </a>
+            <form method="dialog">
+              <button class="button" data-variant="close-modal">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </form>
+          </header>
+          <nav>
+            <ul role="tablist" class="tabs" data-sidenav-tabs>
+              <li>
+                <a href="#welcome" data-tab>Home</a>
+              </li>
+              <li>
+                <a href="#products" data-tab>Products</a>
+              </li>
+              <li>
+                <a href="#about" data-tab>About</a>
+              </li>
+              <li>
+                <a href="#contact" data-tab>Contact</a>
+              </li>
+            </ul>
+            <a
+              href="#searchbar"
+              class="button"
+              data-variant="goto-searchbar-sidenav"
+              data-goto-searchbar-sidenav
+              ><i class="fa-solid fa-search"></i>Search</a
+            >
+            <!-- <div class="sidenav__links">
+                <a href="#contact">
+                  <i class="fa-solid fa-envelope"></i>EMAIL US
                 </a>
-                <button
-                  class="button"
-                  data-variant="close-modal"
-                  data-micromodal-close
-                >
-                  <i class="fa-solid fa-xmark"></i>
-                </button>
-              </header>
-              <nav>
-                <ul role="tablist" class="tabs" data-sidenav-tabs>
-                  <li>
-                    <a href="#welcome" data-tab>Home</a>
-                  </li>
-                  <li>
-                    <a href="#products" data-tab>Products</a>
-                  </li>
-                  <li>
-                    <a href="#about" data-tab>About</a>
-                  </li>
-                  <li>
-                    <a href="#contact" data-tab>Contact</a>
-                  </li>
-                </ul>
-                <a
-                  href="#searchbar"
-                  class="button"
-                  data-variant="sidenav-goto-searchbar"
-                  data-sidenav-goto-searchbar
-                  ><i class="fa-solid fa-search"></i
-                ></a>
-                <!-- <div class="sidenav__links">
-                  <a href="#contact">
-                    <i class="fa-solid fa-envelope"></i>EMAIL US
-                  </a>
-                  <a href="#"><i class="fa-brands fa-whatsapp"></i>CALL US</a>
-                </div> -->
-              </nav>
-            </div>
-          </div>
+                <a href="#"><i class="fa-brands fa-whatsapp"></i>CALL US</a>
+              </div> -->
+          </nav>
         </div>
-      </div>
-      <!-- products -->
-      <div class="modal micromodal-slide" id="filters" aria-hidden="true">
-        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
-          <div
-            class="modal__container"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="filters"
-          >
-            <div>
-              <header class="repel">
-                <h1>Filters</h1>
-                <button class="button" data-micromodal-close>
-                  <i class="fa-solid fa-xmark"></i>
-                </button>
-              </header>
-              <div class="filters">
-                <label for="categories">Categories</label>
-                <!-- use tom select dropdown -->
-                <select name="category" id="categories">
-                  <option value="option-1">option-1</option>
-                  <option value="option-2">option-2</option>
-                  <option value="option-3">option-3</option>
-                  <option value="option-4">option-4</option>
-                </select>
-                <label for="sort">Sort by</label>
-                <select name="sort" id="sort">
-                  <option value="option-1">option-1</option>
-                  <option value="option-2">option-2</option>
-                  <option value="option-3">option-3</option>
-                  <option value="option-4">option-4</option>
-                </select>
-                <label for="promotions">Promotions</label>
-                <select name="promotions" id="promotions">
-                  <option value="option-4">option-4</option>
-                </select>
-                <label for="sort">Price range</label>
-                <select name="price_range" id="price_range">
-                  <!-- use toolcoolrangeslider -->
-                  <option value="option-4">option-4</option>
-                </select>
-                <button class="button" data-micromodal-close>
-                  Apply filters(<span data-filter-count>2</span>)
-                </button>
+      </dialog>
+      <dialog
+        class="cart-modal | flyout modal flow"
+        data-cart-modal
+        data-modal
+        data-variant="cart"
+        data-direction="rtl"
+        autofocus
+      >
+        <div>
+          <header class="repel" data-nowrap>
+            <div class="repel" data-nowrap>
+              <h1>My cart</h1>
+              <span class="total-cart-items" data-total-cart-items>0</span>
+            </div>
+            <form method="dialog">
+              <button class="button" data-variant="close-modal">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </form>
+          </header>
+          <ul class="flow" data-cart-items>
+            <p>No items currently in cart</p>
+          </ul>
+          <footer class="flow">
+            <div class="subtotal | repel" data-nowrap>
+              <div class="subtotal__text">
+                <h2>Subtotal</h2>
+                <span>(excluding VAT)</span>
+              </div>
+              <div class="subtotal__price">
+                R<span data-cart-subtotal>0</span>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <!-- credit to Ivan Ilchenko for the inspiration of the item modal design https://dribbble.com/shots/16469717-Furniture-showcase-Mobile-interface -->
-      <div class="modal micromodal-slide" id="product" aria-hidden="true">
-        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
-          <div
-            class="modal__container"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="modal-1-title"
-          >
-            <div>
-              <img src="./assets/imgs/20230711_122524.jpg" alt="" />
-              <button class="button" data-variant="zoom-product-img">
-                <i class="fas fa-magnifying-glass-plus"></i>
+            <div class="flow">
+              <button
+                class="button | w-full"
+                data-clear-cart
+                data-variant="empty-cart"
+                title="Clear all items"
+              >
+                Empty cart
               </button>
-              <button class="button" data-micromodal-close>
-                <i class="fas fa-xmark"></i>
+              <!-- data-over-max -->
+              <button
+                class="button | w-full"
+                data-variant="checkout"
+                title="Proceed to checkout"
+                data-open-modal
+                data-modal-link="checkout"
+              >
+                <i class="fa-solid fa-triangle-exclamation"></i>Checkout
               </button>
-              <details open>
-                <summary>
-                  <h2 data-product-name>Product Name</h2>
-                  <div data-price>R299.02 - R300.20</div>
-                  <div
-                    class="product-item-categories"
-                    data-product-item-categories
-                  >
-                    <span>Shoes</span><span>Fabric</span>
-                  </div>
-                </summary>
-                <p data-product-description>
-                  Wonderful fabric shoes for any occasion. Comfort guarenteed.
-                </p>
-                <div class="product-item-inputs">
-                  <select name="size" id="product-item-size">
-                    <option value="test">test</option>
-                  </select>
-                </div>
-                <div>
-                  <button
-                    class="button"
-                    data-variant="add-to-cart"
-                    data-add-to-cart
-                  >
-                    Add to cart
-                  </button>
-                  <button
-                    class="button"
-                    data-variant="open-cart"
-                    data-micromodal-trigger="cart"
-                  >
-                    <i class="fas fa-cart-shopping"></i>
-                  </button>
-                </div>
-              </details>
-              <!-- <div class="item-modal__content flow"> -->
-
-              <!-- </div> -->
             </div>
+          </footer>
+        </div>
+      </dialog>
+      <dialog
+        data-product-filters-modal
+        data-modal
+        class="product-filters-modal modal flow"
+      >
+        <div>
+          <header class="repel">
+            <h1>Filters</h1>
+            <form method="dialog">
+              <button class="button">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </form>
+          </header>
+          <div class="product-filters__filters">
+            <label for="type">Type:</label>
+            <select
+              style="
+                --focus-ring-offset: 2px;
+                --input-padding-block: var(--space-s);
+                --input-padding-inline: var(--space-s) var(--space-l);
+                --input-background: var(--color-light-50);
+                --input-border-color: var(--color-light-300);
+                --input-border-width: 2px;
+                --input-radius: var(--radius);
+              "
+              name="type"
+              id="type"
+              autofocus
+            >
+              <option value="option-1">option-1</option>
+              <option value="option-2">option-2</option>
+              <option value="option-3">option-3</option>
+              <option value="option-4">option-4</option>
+            </select>
           </div>
         </div>
-      </div>
-      <!-- products -->
+      </dialog>
+      <!-- <dialog
+        class="modal"
+        data-variant="searchbar"
+        data-searchbar-modal
+        data-modal
+      >
+        <form class="searchbar" method="dialog" data-searchbar>
+          <div>
+            <button title="Search" data-searchbar-btn data-variant="search">
+              <i class="fa-solid fa-search"></i>
+            </button>
+            <input
+              value=""
+              type="search"
+              name="search"
+              placeholder="Search products"
+              autocomplete="off"
+              autofocus
+              required
+              data-searchbar-input
+              title="Search products"
+            />
+            <button type="reset" data-variant="searchclear">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        </form>
+      </dialog> -->
     </div>
   </body>
 </html>

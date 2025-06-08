@@ -1,0 +1,49 @@
+/* welcome */
+.welcome {
+  /* width: 100vw; */
+  display: flex;
+  align-items: center;
+  color: var(--color-light-50);
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("./../imgs/ballet/ballerina_white_700w.jpg") center / cover no-repeat;
+  min-height: 100svh;
+}
+
+@media (max-width: 700px) {
+  .welcome {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+      url("./../imgs/ballet/ballerina_white_700w.jpg");
+  }
+}
+
+@media (min-width: 700px) {
+  .welcome {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+      url("./../imgs/ballet/ballet_studio_dark_800w.jpg");
+  }
+}
+
+/* .welcome picture {
+  filter: brightness(0.5);
+  height: 100svh;
+
+  user-select: none;
+}
+.welcome img {
+  object-fit: cover;
+  height: 100%;
+  width: 100vw;
+} */
+
+.welcome h1 {
+  font-size: var(--step-7);
+  font-family: "Playfair";
+
+  /* font-family: var(--font-family-display); */
+  /* font-style: italic; */
+}
+.welcome > div p {
+  font-size: var(--step-1);
+  color: var(--color-light-200);
+}
+/* \ welcome */

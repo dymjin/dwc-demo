@@ -4,3 +4,8 @@ export default class Controller {
     this.view = view;
   }
 }
+
+// const product = document.querySelector(".product");
+// product.addEventListener("click", () => {
+  
+// })

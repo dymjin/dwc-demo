@@ -1,0 +1,395 @@
+/* Util classes */
+/* 
+CUSTOM PROPERTIES AND CONFIGURATION
+--gutter (var(--space-s-m)): This defines the space
+between each item.
+
+--grid-min-item-size (14rem): How large each item should be
+ideally, as a minimum.
+
+--grid-placement (auto-fill): Set either auto-fit or auto-fill
+to change how empty grid tracks are handled. 
+*/
+.grid {
+  display: grid;
+  grid-template-columns: repeat(
+    var(--grid-placement, auto-fill),
+    minmax(var(--grid-min-item-size, 16rem), 1fr)
+  );
+  gap: var(--gutter, var(--space-s-l));
+}
+
+/* EXCEPTIONS */
+.grid[data-layout="50-50"] {
+  --grid-placement: auto-fit;
+  --grid-min-item-size: clamp(16rem, 50vw, 26rem);
+}
+
+.grid[data-layout="33x3"] {
+  --grid-placement: auto-fit;
+  --grid-min-item-size: clamp(16rem, 33%, 18rem);
+}
+
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gutter, var(--space-s-m));
+  justify-content: center;
+}
+
+.flex > * {
+  flex: 1 1 var(--flex-col-w, 40ch);
+}
+
+/*
+  CUSTOM PROPERTIES AND CONFIGURATION
+  --gutter (var(--space-s-m)): This defines the space
+  between each item.
+  --repel-vertical-alignment How items should align vertically.
+  Can be any acceptable flexbox alignment value.
+  */
+.repel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: var(--repel-vertical-alignment, center);
+  gap: var(--gutter, var(--space-s-l));
+}
+
+.repel[data-nowrap] {
+  flex-wrap: nowrap;
+}
+
+/* Cluster */
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gutter, var(--space-s-m));
+  justify-content: var(--cluster-horizontal-alignment, flex-start);
+  align-items: var(--cluster-vertical-alignment, center);
+}
+
+.cluster[data-nowrap] {
+  flex-wrap: nowrap;
+}
+
+.reel {
+  /* --reel-calculated-space: var(--reel-space, var(--gutter, 2rem)); */
+  display: flex;
+  gap: var(--gutter);
+  height: auto;
+  max-width: 100%;
+  margin-inline: auto;
+  padding-block-end: var(--space-s);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.reel > * {
+  margin-block: auto;
+  flex-basis: var(
+    --reel-item-width,
+    calc(33.333% - var(--reel-calculated-space))
+  );
+  flex-shrink: 0;
+}
+
+/* .reel > * + * {
+    margin-inline-start: var(--reel-calculated-space);
+  } */
+
+.reel *:first-child {
+  margin-left: auto;
+}
+
+.reel *:last-child {
+  margin-right: auto;
+}
+
+.frame {
+  --n: 16;
+  --d: 9;
+  aspect-ratio: var(--n) / var(--d);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.frame > img,
+.frame > video {
+  inline-size: 100%;
+  block-size: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+[data-mobile-only] {
+  display: initial !important;
+}
+
+[data-desktop-only] {
+  display: none !important;
+}
+
+/* Modals */
+.modal {
+  border: none;
+  max-height: 100vh;
+  max-width: 100vw;
+}
+
+.flyout {
+  height: 100%;
+  transition: var(--transition-drawer) allow-discrete;
+}
+
+.flyout[open][data-direction="ltr"] {
+  transform: translateX(0);
+}
+.flyout[data-direction="ltr"] {
+  transform: translateX(-100%);
+  margin: 0;
+}
+@starting-style {
+  .flyout[open][data-direction="ltr"] {
+    transform: translateX(-100%);
+  }
+}
+
+.flyout[open][data-direction="rtl"] {
+  transform: translateX(-100%);
+}
+.flyout[data-direction="rtl"] {
+  transform: translateX(0%);
+}
+@starting-style {
+  .flyout[open][data-direction="rtl"] {
+    transform: translateX(0);
+  }
+}
+
+.flyout::backdrop {
+  background-color: rgb(0 0 0 / 0%);
+  transition: display var(--transition-base) allow-discrete,
+    overlay var(--transition-base) allow-discrete,
+    background-color var(--transition-base);
+  width: 100vw;
+}
+
+.flyout[open]::backdrop {
+  background-color: rgb(0 0 0 / 0.5);
+}
+@starting-style {
+  .flyout[open]::backdrop {
+    background-color: rgb(0 0 0 / 0%);
+  }
+}
+
+.flow > * + * {
+  margin-top: var(--flow-space, 1em);
+}
+
+.region {
+  padding-block: var(--region-space);
+}
+
+.region[data-flush="top"] {
+  padding-block-start: 0;
+}
+
+.region[data-flush="bottom"] {
+  padding-block-end: 0;
+}
+
+.wrapper {
+  max-width: var(--wrapper-max-width, 90rem);
+  margin-inline: auto;
+  padding-inline: var(--wrapper-space, var(--gutter));
+  position: relative;
+}
+
+.w-full {
+  width: 100%;
+  max-width: unset;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 0;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  white-space: nowrap;
+}
+
+/* Buttons */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--button-gap, var(--gutter));
+  padding: var(--button-padding, var(--space-2xs, 0.8em) var(--space-m, 2em));
+  background: var(--button-bg, var(--color-primary-600));
+  color: var(--button-color, var(--color-dark-950));
+  line-height: var(--button-leading, var(--leading-fine));
+
+  border-color: var(--button-border-color, var(--color-light-300));
+  border-width: var(--button-border-width, var(--stroke-weight-heavy));
+  border-style: var(--button-border-style, var(--stroke-style));
+
+  border-radius: var(--button-radius, var(--radius));
+
+  text-decoration: none;
+  font-family: inherit;
+  font-weight: var(--button-font-weight, var(--font-weight-bold));
+  font-size: var(--button-font-size, var(--step--1));
+  letter-spacing: var(--button-kerning, var(--kerning-loose));
+
+  transition: color var(--transition-movement),
+    background-color var(--transition-movement),
+    border-color var(--transition-movement);
+  cursor: pointer;
+
+  user-select: none;
+}
+
+.button:hover,
+.button:focus {
+  background: var(--button-interact-bg, var(--button-bg));
+  color: var(--button-interact-color, currentColor);
+}
+
+.button i,
+.button span {
+  pointer-events: none;
+}
+
+.button[disabled] {
+  background: var(--button-disabled-bg, var(--color-dark-600)) !important;
+  color: var(--button-disabled-color, var(--color-dark-950)) !important;
+  cursor: not-allowed;
+}
+
+/* Exceptions */
+.button[data-variant="goto-searchbar"] {
+  --button-bg: var(--color-dark-950);
+  --button-interact-bg: var(--color-primary-500);
+  --button-color: var(--color-light-50);
+  --button-padding: var(--space-2xs);
+  border: none;
+  font-size: inherit;
+}
+
+.button[data-variant="goto-searchbar-sidenav"] {
+  --button-bg: var(--color-dark-950);
+  --button-interact-bg: var(--color-primary-500);
+  --button-color: var(--color-light-50);
+  --button-interact-color: var(--color-light-50);
+  --button-padding: var(--space-m);
+  --button-radius: 10rem;
+  justify-content: start;
+  margin: var(--space-s);
+  border: none;
+  font-size: var(--step-1);
+  font-weight: normal;
+}
+
+.button[data-variant="search"] {
+  border-radius: var(--radius) 0 0 var(--radius);
+  border: none;
+  --button-bg: var(--color-dark-950);
+  --button-color: var(--color-light-50);
+  --button-interact-bg: var(--color-primary-500);
+  --button-padding: var(--space-xs);
+  font-size: var(--step-1);
+}
+
+.button[data-variant="open-product-filters"] {
+  --button-interact-bg: var(--color-primary-500);
+  --button-interact-color: var(--color-light-50);
+  --button-bg: var(--color-light-50);
+  border: 2px solid var(--color-light-300);
+
+  padding-inline: var(--space-s);
+  gap: var(--space-xs);
+  font-size: var(--step-0);
+  &:hover,
+  &:focus {
+    border-color: var(--color-primary-500);
+  }
+}
+
+.button[data-variant="cta"] {
+  --button-interact-bg: var(--color-light-50);
+  --button-interact-color: var(--color-primary-500);
+  --button-color: var(--color-light-50);
+  --button-padding: var(--space-m) var(--space-l);
+  border: none;
+  font-size: var(--step-2);
+}
+.button[data-variant="open-sidenav"] {
+  --button-bg: transparent;
+  --button-color: currentColor;
+  --button-interact-color: var(--color-primary-500);
+  --button-padding: var(--space-2xs);
+  border: none;
+  font-size: var(--step-2);
+}
+.button[data-variant="open-cart"] {
+  --button-bg: transparent;
+  --button-color: currentColor;
+  --button-interact-color: var(--color-primary-500);
+  --button-padding: var(--space-2xs);
+  border: none;
+  font-size: var(--step-2);
+}
+.button[data-variant="empty-cart"] {
+  border: none;
+  --button-bg: var(--color-dark-950);
+  --button-color: var(--color-light-50);
+  --button-interact-bg: var(--color-primary-500);
+  --button-interact-color: var(--color-light-50);
+
+  --button-padding: var(--space-xs);
+  font-size: var(--step-0);
+}
+.button[data-variant="checkout"] {
+  border: none;
+  --button-bg: var(--color-dark-950);
+  --button-color: var(--color-light-50);
+  --button-interact-bg: var(--color-primary-500);
+  --button-interact-color: var(--color-light-50);
+  --button-padding: var(--space-xs);
+  font-size: var(--step-0);
+
+  & i {
+    display: none;
+  }
+}
+.button[data-variant="checkout"][data-over-max] {
+  & i {
+    display: initial;
+  }
+}
+
+button[data-variant="close-modal"] {
+  --button-bg: transparent;
+  --button-color: currentColor;
+  --button-interact-color: var(--color-primary-500);
+  --button-padding: var(--space-s);
+  border: none;
+  font-size: var(--step-3);
+}
+
+button[data-variant="bullet"][data-current-bullet] {
+  background: blue;
+}

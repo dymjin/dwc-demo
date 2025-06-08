@@ -1,0 +1,55 @@
+/* about */
+.about {
+  color: var(--color-light-50);
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("./../imgs/ballet/ballet_studio_center_focus_700w.jpg") center / cover
+      no-repeat fixed white;
+}
+
+@media (max-width: 700px) {
+  .about {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+      url("./../imgs/ballet/ballet_studio_center_focus_700w.jpg");
+  }
+}
+
+@media (min-width: 700px) {
+  .about {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+      url("./../imgs/ballet/ballet_room_dancer_800w.jpg");
+  }
+}
+
+/* .about h2 {
+  font-size: var(--size-step-5);
+} */
+
+/* .about p {
+  margin-left: auto;
+  margin-right: auto;
+  font-size: var(--fs-step-1);
+  text-align: justify;
+} */
+
+.company-story p {
+  margin-left: auto;
+  margin-right: auto;
+  font-size: var(--step-1);
+  /* text-wrap: balance; */
+  text-align: center;
+  /* text-align: ; */
+}
+/* 
+.about ::selection {
+  background: var(--clr-primary-600);
+  color: var(--clr-light);
+} */
+
+.guarentee-card {
+  padding: var(--space-m);
+  border-radius: 1rem;
+  backdrop-filter: blur(10px);
+  background-color: lch(from var(--clr-bg) l c h / 0.2);
+}
+
+/* \ about */
