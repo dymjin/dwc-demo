@@ -2,12 +2,12 @@ export default class Model {
   constructor(products) {
     this.products = products || [];
     // this.cartItems = this.#getCart();
-    // this.productFilters = this.#getFilters() || {};
+    this.productFilters = this.#getFilters() || {};
     this.#getUniqProductVariants() || this.#setUniqProductVariants();
-    this.uniqProducts = this.getUniqProductVariants();
+    this.uniqProducts = this.#getUniqProductVariants();
   }
 
-  //util
+  // util
   #commit(storageType, name, value) {
     storageType.setItem(name, JSON.stringify(value));
   }
@@ -25,9 +25,9 @@ export default class Model {
     const sorted = list.sort((a, b) => a.PRICE - b.PRICE);
     return { min: sorted[0].PRICE, max: sorted.at(-1).PRICE };
   }
-  //util
+  // util
 
-  //product
+  // product
   #condenseProductGroup(group) {
     const priceRange = this.getPriceRange(group);
     const obj = {
@@ -56,5 +56,27 @@ export default class Model {
   #getUniqProductVariants() {
     return JSON.parse(localStorage.getItem("uniq_products"));
   }
-  //product
+  // product
+
+  // filter
+  clearFilters() {
+    this.productFilters = {};
+    this.onFiltersChanged(this.products, this.productFilters);
+    this.#commit(sessionStorage, "product_filters", this.productFilters);
+  }
+
+  updateFilters(filters) {
+    this.productFilters = filters;
+    this.onFiltersChanged(this.products, this.productFilters);
+    this.#commit(sessionStorage, "product_filters", this.productFilters);
+  }
+
+  bindFiltersChanged(callback) {
+    this.onFiltersChanged = callback;
+  }
+
+  #getFilters() {
+    return JSON.parse(sessionStorage.getItem("product_filters"));
+  }
+  // filter
 }
