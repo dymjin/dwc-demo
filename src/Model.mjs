@@ -3,7 +3,7 @@ export default class Model {
     this.products = products || [];
     // this.cartItems = this.#getCart();
     // this.productFilters = this.#getFilters() || {};
-    this.getUniqProductVariants() || this.#setUniqProductVariants();
+    this.#getUniqProductVariants() || this.#setUniqProductVariants();
     this.uniqProducts = this.getUniqProductVariants();
   }
 
@@ -53,7 +53,7 @@ export default class Model {
     this.#commit(localStorage, "uniq_products", uniqProducts);
   }
 
-  getUniqProductVariants() {
+  #getUniqProductVariants() {
     return JSON.parse(localStorage.getItem("uniq_products"));
   }
   //product
