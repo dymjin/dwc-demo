@@ -78,5 +78,19 @@ export default class Model {
   #getFilters() {
     return JSON.parse(sessionStorage.getItem("product_filters"));
   }
+
+  getFilteredInUniq(filteredProducts) {
+    const filteredProductsIDs = Object.groupBy(
+      [...filteredProducts],
+      (product) => product["ITEM CODE"]
+    );
+    let diff = [];
+    for (const id in filteredProductsIDs) {
+      diff.push(
+        this.uniqProducts.find((product) => product["ITEM CODE"] === id)
+      );
+    }
+    return diff;
+  }
   // filter
 }
