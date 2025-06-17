@@ -4,11 +4,6 @@ export default class Controller {
     this.model = model;
     this.view = view;
 
-    // filters
-    this.model.bindFiltersChanged(this.onFiltersChanged);
-    this.model.updateFilters({ COLOUR: "=pink", SIZE: "lrg" });
-    // filters
-
     // init
     // this.view.fillCategoryList(this.model.getCategories());
     // this.view.fillFilterOptions({
@@ -16,6 +11,17 @@ export default class Controller {
     //   priceRange: this.model.getPriceRange(),
     // });
     // init
+
+    // filters
+    // this.model.bindFiltersChanged(this.onFiltersChanged);
+    // this.model.updateFilters({ COLOUR: "=pink", SIZE: "lrg" });
+    // filters
+
+    // cart
+    this.model.bindCartChanged(this.onCartChanged);
+    // this.model.addCartItem("test", 20.3, "fp2d1d", 2, "1 to 5", "red");
+    // this.model.editCartItem({ colour: "red" }, 0);
+    // cart
   }
 
   // filter
@@ -35,10 +41,11 @@ export default class Controller {
     // this.view.updateFilterInputs(this.model.productFilters);
     // this.view.displayProducts(groupedProducts);
   };
+  // filter
+
+  // cart
+  onCartChanged = () => {
+    this.model.updateCart();
+  };
+  // cart
 }
-// filter
-
-// const product = document.querySelector(".product");
-// product.addEventListener("click", () => {
-
-// })
