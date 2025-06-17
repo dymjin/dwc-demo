@@ -1,3 +1,4 @@
+import Fuse from "fuse.js";
 export default class Controller {
   constructor(model, view) {
     this.model = model;
@@ -5,7 +6,7 @@ export default class Controller {
 
     // filters
     this.model.bindFiltersChanged(this.onFiltersChanged);
-    // this.model.updateFilters({ searchStr: "hi" });
+    this.model.updateFilters({ COLOUR: "=pink", SIZE: "lrg" });
     // filters
 
     // init
@@ -17,21 +18,25 @@ export default class Controller {
     // init
   }
 
-  onFiltersChanged = (filter) => {
-    // console.log("hi");
-    // this.view.updateFilterInputs(filter);
-    // const filteredProducts = this.model.filterProducts(
-    //   this.model.products,
-    //   filter
-    // );
-    // const groupedProducts = this.model.groupProducts(filteredProducts, [
-    //   "ITEM CODE",
-    //   "DESCRIPTION",
-    //   "PRICE",
-    // ]);
+  // filter
+  onFiltersChanged = () => {
+    const filterKeys = Object.keys(this.model.productFilters);
+    const fuse = new Fuse([...this.model.products], {
+      keys: filterKeys,
+      useExtendedSearch: true,
+      findAllMatches: true,
+    });
+    const filteredProducts = fuse
+      .search({
+        $and: [this.model.productFilters],
+      })
+      .map((product) => product["item"]);
+    const filteredUniq = this.model.getFilteredInUniq(filteredProducts);
+    // this.view.updateFilterInputs(this.model.productFilters);
     // this.view.displayProducts(groupedProducts);
   };
 }
+// filter
 
 // const product = document.querySelector(".product");
 // product.addEventListener("click", () => {
