@@ -1,7 +1,7 @@
 export default class Model {
   constructor(products) {
     this.products = products || [];
-    // this.cartItems = this.#getCart();
+    this.cartItems = this.#getCart() || [];
     this.productFilters = this.#getFilters() || {};
     this.#getUniqProductVariants() || this.#setUniqProductVariants();
     this.uniqProducts = this.#getUniqProductVariants();
@@ -61,14 +61,14 @@ export default class Model {
   // filter
   clearFilters() {
     this.productFilters = {};
-    this.onFiltersChanged(this.products, this.productFilters);
     this.#commit(sessionStorage, "product_filters", this.productFilters);
+    this.onFiltersChanged();
   }
 
   updateFilters(filters) {
     this.productFilters = filters;
-    this.onFiltersChanged(this.products, this.productFilters);
     this.#commit(sessionStorage, "product_filters", this.productFilters);
+    this.onFiltersChanged();
   }
 
   bindFiltersChanged(callback) {
@@ -93,4 +93,85 @@ export default class Model {
     return diff;
   }
   // filter
+
+  // cart
+  #sortCart() {
+    [...this.cartItems].forEach((item, idx) => (item.index = idx));
+  }
+  #condenseCartItems() {
+    // based on and expanded on: https://stackoverflow.com/a/67796742
+    const cartItemsByID = Object.groupBy(
+      this.cartItems,
+      (item) => item.productID
+    );
+    const grouped2DArr = Object.values(cartItemsByID).map((group) => {
+      return (group = group.reduce((acc, groupItem) => {
+        const matchItem = acc.find(
+          (item) =>
+            item["colour"] === groupItem["colour"] &&
+            item["size"] === groupItem["size"] &&
+            item.index !== groupItem.index
+        );
+        matchItem ? (acc[0].qty += groupItem.qty) : acc.push(groupItem);
+        return acc;
+      }, []));
+    });
+    return grouped2DArr.flat(1);
+  }
+
+  updateCart() {
+    this.cartItems = this.#condenseCartItems();
+    this.#sortCart();
+    this.#commit(localStorage, "cart_items", this.cartItems);
+  }
+
+  addCartItem(description, price, id, qty, size, colour) {
+    const duplicateItem = [...this.cartItems].find((item) => {
+      return (
+        item["description"] === description &&
+        item["price"] === price &&
+        item["size"] === size &&
+        item["colour"] === colour &&
+        item["id"] === id
+      );
+    });
+    if (!!duplicateItem && Object.hasOwn(duplicateItem, "id")) {
+      this.updateCartItemQty(duplicateItem);
+      this.#commit(localStorage, "cart_items", this.cartItems);
+    } else {
+      this.cartItems.push({ description, price, id, qty, size, colour });
+      this.onCartChanged();
+    }
+  }
+
+  editCartItem(changes, index) {
+    const item = [...this.cartItems].find((item) => item["index"] === index);
+    if (item) {
+      Object.keys(changes).forEach((key) => (item[key] = changes[key]));
+    }
+    this.onCartChanged();
+  }
+
+  updateCartItemQty(item) {
+    item.qty = item.qty + 1;
+  }
+
+  removeCartItem(index) {
+    this.cartItems = this.cartItems.filter((item) => item["index"] !== index);
+    this.onCartChanged();
+  }
+
+  clearCart() {
+    this.cartItems = [];
+    this.onCartChanged();
+  }
+
+  #getCart() {
+    return JSON.parse(localStorage.getItem("cart_items"));
+  }
+
+  bindCartChanged(callback) {
+    this.onCartChanged = callback;
+  }
+  // cart
 }
