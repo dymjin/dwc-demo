@@ -67,7 +67,7 @@
   </head>
   <body>
     <div class="scroller" data-scroller>
-      <header class="page-header" data-page-header>
+      <header class="page-header visible" data-page-header>
         <div class="wrapper">
           <nav class="repel" data-nowrap>
             <div class="cluster" data-nowrap>
@@ -92,10 +92,10 @@
             </div>
             <div class="cluster" data-nowrap>
               <div class="header-links" data-header-tabs>
-                <a href="#welcome" data-tab>Home</a>
-                <a href="#products" data-tab>Products</a>
-                <a href="#about" data-tab>About</a>
-                <a href="#contact" data-tab>Contact</a>
+                <a href="#welcome" data-tab="welcome" data-active-tab>Home</a>
+                <a href="#products" data-tab="products">Products</a>
+                <a href="#about" data-tab="about">About</a>
+                <a href="#contact" data-tab="contact">Contact</a>
               </div>
 
               <button
@@ -111,7 +111,6 @@
                 class="button"
                 title="Cart"
                 data-variant="open-cart"
-                data-micromodal-trigger="cart"
                 data-trigger-modal="cart"
               >
                 <i class="fas fa-shopping-cart"> </i>
@@ -143,7 +142,6 @@
                 id="products-searchbar"
                 placeholder="Search products"
                 autocomplete="off"
-                required
               />
             </form>
             <div>
@@ -176,25 +174,13 @@
           </div>
         </section>
         <section id="products" class="products" data-section>
-          <div class="swiper" data-category-swiper>
-            <div class="swiper-wrapper">
-              <div class="swiper-slide">
-                <h1 class="swiper-title">Title 1</h1>
-                <button>View</button>
-              </div>
-              <div class="swiper-slide">
-                <h1 class="swiper-title">Title 1</h1>
-                <button>View</button>
-              </div>
-              <div class="swiper-slide">
-                <h1 class="swiper-title">Title 1</h1>
-                <button>View</button>
-              </div>
-              <div class="swiper-slide">
-                <h1 class="swiper-title">Title 1</h1>
-                <button>View</button>
-              </div>
-            </div>
+          <div class="category-swiper" data-category-swiper>
+            <div
+              class="parallax-bg"
+              data-swiper-parallax="-23%"
+              data-parallax-bg
+            ></div>
+            <div class="swiper-wrapper"></div>
           </div>
           <div class="product-list" data-product-list></div>
           <button class="button" data-variant="load-more" data-load-more>
@@ -367,7 +353,13 @@
               </div>
             </ul>
             <footer class="flow">
-              <button class="button" data-variant="update-cart" data-update-cart>Update cart</button>
+              <button
+                class="button"
+                data-variant="update-cart"
+                data-update-cart
+              >
+                Update cart
+              </button>
               <div class="subtotal | repel" data-nowrap>
                 <div class="subtotal__text">
                   <h2>Subtotal</h2>
@@ -445,36 +437,88 @@
               </button>
             </header>
             <div class="filters" data-filter-group>
-              <sl-details summary="Categories" name="category" id="categories">
-                <label><input type="checkbox" />hello</label>
-                <label><input type="checkbox" />hello</label>
-                <label><input type="checkbox" />hello</label>
-                <label><input type="checkbox" />hello</label>
+              <sl-details summary="Categories" id="categories">
+                <label
+                  ><input
+                    name="CATEGORY"
+                    value="leotards"
+                    type="checkbox"
+                  />Leotard</label
+                >
+                <label
+                  ><input
+                    name="CATEGORY"
+                    value="skirts"
+                    type="checkbox"
+                  />Skirts</label
+                >
+                <label
+                  ><input
+                    name="CATEGORY"
+                    value="pants"
+                    type="checkbox"
+                  />Pants</label
+                >
+                <label
+                  ><input
+                    name="CATEGORY"
+                    value="accessories"
+                    type="checkbox"
+                  />Accessories</label
+                >
               </sl-details>
-              <sl-details summary="Categories" name="category" id="categories">
-                <label><input type="checkbox" />hello</label>
-                <label><input type="checkbox" />hello</label>
-                <label><input type="checkbox" />hello</label>
-                <label><input type="checkbox" />hello</label>
+              <sl-details summary="Colours" id="colours">
+                <label
+                  ><input
+                    name="COLOUR"
+                    type="checkbox"
+                    value="navy"
+                  />Navy</label
+                >
+                <label
+                  ><input
+                    name="COLOUR"
+                    type="checkbox"
+                    value="black"
+                  />Black</label
+                >
+                <label
+                  ><input
+                    name="COLOUR"
+                    type="checkbox"
+                    value="pink"
+                  />Pink</label
+                >
+                <label
+                  ><input
+                    name="COLOUR"
+                    type="checkbox"
+                    value="white"
+                  />White</label
+                >
               </sl-details>
-              <sl-details summary="Categories" name="category" id="categories">
-                <label><input type="checkbox" />hello</label>
-                <label><input type="checkbox" />hello</label>
-                <label><input type="checkbox" />hello</label>
-                <label><input type="checkbox" />hello</label>
+              <sl-details summary="Sizes" id="sizes">
+                <label
+                  ><input name="SIZE" type="checkbox" value="SML" />SML</label
+                >
+                <label
+                  ><input name="SIZE" type="checkbox" value="MED" />MED</label
+                >
+                <label
+                  ><input name="SIZE" type="checkbox" value="LRG" />LRG</label
+                >
               </sl-details>
               <!-- <label for="sort">Price range</label> -->
-              <tc-range-slider
+              <!-- <tc-range-slider
                 id="slider"
                 value1="30"
                 value2="70"
-                generate-labels="true"
-                generate-labels-text-color="#5e7593"
-                generate-labels-units="%"
+                generate-labels-units="R"
                 slider-width="min(200px, 100%)"
-              ></tc-range-slider>
-              <button class="button" data-close-modal>
-                Apply filters(<span data-filter-count>2</span>)
+              ></tc-range-slider> -->
+              <button class="button" data-close-modal data-apply-filters>
+                <p>Apply filters</p>
+                <span data-filter-count>0</span>
               </button>
             </div>
           </div>
