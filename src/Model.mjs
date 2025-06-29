@@ -8,6 +8,8 @@ export default class Model {
   }
 
   // util
+ 
+
   #commit(storageType, name, value) {
     storageType.setItem(name, JSON.stringify(value));
   }
@@ -28,14 +30,18 @@ export default class Model {
   // util
 
   // product
+  getUniqProduct(id) {
+    return this.uniqProducts.find((item) => item["ITEM CODE"] === id);
+  }
+
   #condenseProductGroup(group) {
     const priceRange = this.getPriceRange(group);
     const obj = {
       DESCRIPTION: group[0].DESCRIPTION,
       "ITEM CODE": group[0]["ITEM CODE"],
       PRICE: [priceRange.min, priceRange.max],
-      COLOURS: Object.keys(this.#getUniqEntries(group, "COLOUR")),
-      SIZES: Object.keys(this.#getUniqEntries(group, "SIZE")).sort(
+      COLOUR: Object.keys(this.#getUniqEntries(group, "COLOUR")),
+      SIZE: Object.keys(this.#getUniqEntries(group, "SIZE")).sort(
         (a, b) => a - b
       ),
     };
