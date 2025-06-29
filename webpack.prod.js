@@ -10,6 +10,11 @@ module.exports = merge(common, {
   optimization: {
     minimizer: [new CssMinimizerPlugin()],
   },
+  performance: {
+    hints: false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
+  },
   module: {
     rules: [
       {
@@ -26,6 +31,14 @@ module.exports = merge(common, {
             },
           },
         ],
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: "asset/resource",
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: "asset/resource",
       },
     ],
   },
