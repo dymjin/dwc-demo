@@ -156,7 +156,7 @@ export default class View {
     });
     // init filter dropdowns
 
-    const drawers = document.querySelectorAll("[data-drawer]");
+    const drawers = document.querySelectorAll("[data-dialog]");
     drawers.forEach((drawer) => {
       drawer
         .querySelector("[data-close-modal]")
@@ -166,7 +166,7 @@ export default class View {
     triggers.forEach((trigger) => {
       trigger.addEventListener("click", () => {
         this.#getElement(
-          `[data-drawer="${trigger.dataset.triggerModal}"]`
+          `[data-dialog="${trigger.dataset.triggerModal}"]`
         ).show();
       });
     });
@@ -425,12 +425,17 @@ export default class View {
     const filterGroup = this.#getElement("[data-filter-group]");
     const filterCount = this.#getElement("[data-filter-count]");
 
-    filter.options.forEach((option, idx) => {
-      filterGroup.querySelector(
-        `[value="${option[Object.keys(option)[0]]}"]`
-      ).checked = true;
-      filterCount.textContent = idx + 1;
-    });
+    if (filter.options.length > 0) {
+      filter.options.forEach((option, idx) => {
+        filterGroup.querySelector(
+          `[value="${option[Object.keys(option)[0]]}"]`
+        ).checked = true;
+        filterCount.textContent = idx + 1;
+      });
+    } else {
+      filterCount.textContent = 0;
+    }
+
     searchbarInput.value = filter.searchStr;
   }
 
@@ -479,9 +484,13 @@ export default class View {
           }
         });
         const filledCheckboxes = [...inputs].filter((input) => input.checked);
-        filledCheckboxes.forEach((_, idx) => {
-          filterCount.textContent = idx + 1;
-        });
+        if (filledCheckboxes.length > 0) {
+          filledCheckboxes.forEach((_, idx) => {
+            filterCount.textContent = idx + 1;
+          });
+        } else {
+          filterCount.textContent = 0;
+        }
       });
     });
 
