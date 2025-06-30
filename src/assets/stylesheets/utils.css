@@ -449,8 +449,101 @@ button[data-variant="bullet"][data-current-bullet] {
   }
 }
 
-/* @media (any-hover: hover) {
-  [data-dialog][data-variant="filters"] [data-apply-filters] {
-    width: fit-content;
+[data-dialog][data-variant="cart"]::part(panel) {
+  background: var(--color-light-50);
+}
+
+[data-dialog][data-variant="cart"] .modal__container {
+  height: 100%;
+  background: transparent;
+  padding: 0;
+}
+
+[data-dialog][data-variant="cart"] .modal__container .cart__wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-dialog][data-variant="cart"] [data-cart-items] {
+  flex: 1;
+  overflow-y: auto;
+}
+
+[data-dialog][data-variant="cart"] header {
+  padding: var(--space-s);
+  border-bottom: 2px solid var(--color-light-200);
+}
+
+[data-dialog][data-variant="cart"] header .total-cart-items {
+  padding: var(--space-xs);
+  background-color: var(--color-primary-500);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--radius);
+}
+
+[data-dialog][data-variant="cart"] header button[data-close-modal] {
+  padding: var(--space-2xs);
+  border-radius: 8px;
+
+  color: var(--color-light-50);
+  font-size: var(--step-0);
+  background: var(--color-dark-950);
+  & svg {
+    aspect-ratio: 1/1;
+  }
+
+  &:hover {
+    background: var(--color-dark-800);
+  }
+}
+
+[data-dialog][data-variant="cart"] footer {
+  position: relative;
+  padding: var(--space-s);
+}
+
+[data-dialog][data-variant="cart"] footer [data-update-cart]{
+  position: absolute;
+  inset: 0;
+  top: -2.5rem;
+  font-size: var(--step-0);
+  width: fit-content;
+  height: fit-content;
+  padding: var(--space-xs);
+  border-radius: 0.5rem;
+  background-color: var(--color-primary-500);  
+  color: var(--color-light-50);
+  /* align-self: center; */
+  margin-inline: auto;
+
+  &:hover {
+    background-color: var(--color-primary-700);
+  }
+  /* top: ; */
+}
+
+[data-dialog][data-variant="cart"] .subtotal{
+  margin-top: 0;
+}
+
+[data-dialog][data-variant="cart"] .buttons{
+  display: flex;
+  align-items: center;
+  gap: var(--gutter);
+}
+
+
+/* 
+@media (any-hover: hover) {
+  [data-dialog][data-variant="cart"]::part(panel) {
+    height: calc(100% - calc(var(--space-xs) * 2));
+    margin-top: var(--space-xs);
+    margin-right: var(--space-xs);
+    border-radius: 16px;
   }
 } */
