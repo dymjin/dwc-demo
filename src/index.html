@@ -72,7 +72,7 @@
           <nav class="repel" data-nowrap>
             <div class="cluster" data-nowrap>
               <div class="dropdown-selection">
-                <sl-dropdown hoist data-header-dropdown>
+                <sl-dropdown hoist data-header-dropdown data-mobile-only>
                   <sl-button slot="trigger"
                     ><i class="fas fa-bars"></i
                   ></sl-button>
@@ -91,7 +91,7 @@
               </a>
             </div>
             <div class="cluster" data-nowrap>
-              <div class="header-links" data-header-tabs>
+              <div class="header-links" data-header-tabs data-desktop-only>
                 <a href="#welcome" data-tab="welcome" data-active-tab>Home</a>
                 <a href="#products" data-tab="products">Products</a>
                 <a href="#about" data-tab="about">About</a>
@@ -102,8 +102,7 @@
                 class="button"
                 title="Search"
                 data-variant="open-searchbar"
-                data-desktop-only
-                data-open-searchbar
+                data-trigger-modal="searchbar"
               >
                 <i class="fa-solid fa-search"></i>
               </button>
@@ -118,44 +117,7 @@
             </div>
           </nav>
         </div>
-        <div class="search-controls" data-search-controls>
-          <div id="searchbar" class="product-search-controls">
-            <form class="searchbar-form" data-products-searchbar-form>
-              <label for="products-searchbar" class="visually-hidden"
-                >Search products:</label
-              >
-              <button type="submit" class="button" data-variant="search">
-                <i class="fa-solid fa-search"></i>
-              </button>
-              <input
-                class="searchbar-input"
-                style="
-                  --focus-ring-offset: 2px;
-                  --input-padding-block: var(--space-s);
-                  --input-background: var(--color-light-50);
-                  --input-border-color: var(--color-light-300);
-                  --input-border-width: 2px;
-                "
-                value=""
-                type="search"
-                name="product_search"
-                id="products-searchbar"
-                placeholder="Search products"
-                autocomplete="off"
-              />
-            </form>
-            <div>
-              <button
-                type="button"
-                class="button"
-                data-variant="open-product-filters"
-                data-trigger-modal="filters"
-              >
-                <i class="fa-solid fa-filter"></i>
-              </button>
-            </div>
-          </div>
-        </div>
+        
       </header>
       <main>
         <section id="welcome" class="welcome" data-section>
@@ -311,7 +273,7 @@
         </div>
       </footer>
       <!-- MODALS -->
-      <sl-drawer data-drawer="cart" no-header>
+      <sl-drawer data-dialog="cart" no-header>
         <div
           class="modal__container"
           role="dialog"
@@ -394,7 +356,7 @@
           </div>
         </div>
       </sl-drawer>
-      <sl-dialog data-drawer="empty-cart" no-header>
+      <sl-dialog data-dialog="empty-cart" no-header>
         <div
           class="modal__container"
           role="dialog"
@@ -422,14 +384,14 @@
           </div>
         </div>
       </sl-dialog>
-      <sl-dialog data-drawer="filters" no-header>
+      <sl-dialog data-dialog="filters" no-header data-variant="filters">
         <div
           class="modal__container"
           role="dialog"
           aria-modal="true"
           aria-labelledby="filters"
         >
-          <div>
+          <div class="flow">
             <header class="repel">
               <h1>Filters</h1>
               <button class="button" data-close-modal>
@@ -516,16 +478,16 @@
                 generate-labels-units="R"
                 slider-width="min(200px, 100%)"
               ></tc-range-slider> -->
-              <button class="button" data-close-modal data-apply-filters>
-                <p>Apply filters</p>
-                <span data-filter-count>0</span>
-              </button>
             </div>
+            <button class="button" data-close-modal data-apply-filters>
+              <p>Apply filters</p>|
+              <span data-filter-count>0</span>
+            </button>
           </div>
         </div>
       </sl-dialog>
       <!-- credit to Ivan Ilchenko for the inspiration of the item modal design https://dribbble.com/shots/16469717-Furniture-showcase-Mobile-interface -->
-      <sl-dialog data-drawer="product" no-header>
+      <sl-dialog data-dialog="product" no-header>
         <div>
           <img src="./assets/imgs/RAD TP01.jpg" alt="" />
           <button class="button" data-variant="zoom-product-img" data-zoom-img>
@@ -560,6 +522,48 @@
               <i class="fas fa-cart-shopping"></i>
             </button>
           </div>
+        </div>
+      </sl-dialog>
+      <sl-dialog data-dialog="searchbar" no-header>
+        <div
+          class="modal__container"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="filters"
+        >
+        <div class="search-controls" data-search-controls>
+          <div id="searchbar" class="product-search-controls">
+            <form class="searchbar-form" data-products-searchbar-form>
+              <label for="products-searchbar" class="visually-hidden"
+                >Search products:</label
+              >
+              <button type="submit" class="button" data-variant="search" data-close-modal>
+                <i class="fa-solid fa-search"></i>
+              </button>
+              <input
+                class="searchbar-input"
+                value=""
+                type="search"
+                name="product_search"
+                id="products-searchbar"
+                placeholder="Search products"
+                autocomplete="off"
+              />
+              <button
+                type="button"
+                class="button"
+                data-variant="open-product-filters"
+                data-trigger-modal="filters"
+              >
+                <i class="fa-solid fa-filter"></i>
+                <span data-desktop-only>Filters</span>
+              </button>
+            </form>
+            <!-- <div>
+           
+            </div> -->
+          </div>
+        </div>
         </div>
       </sl-dialog>
     </div>
