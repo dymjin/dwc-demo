@@ -393,3 +393,64 @@ button[data-variant="close-modal"] {
 button[data-variant="bullet"][data-current-bullet] {
   background: blue;
 }
+
+/* Dialogs */
+[data-dialog]::part(overlay) {
+  background-color: rgb(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+}
+[data-dialog] .modal__container {
+  padding: var(--space-m);
+  background: var(--color-light-50);
+}
+
+/* Variants */
+[data-dialog][data-variant="filters"] .modal__container {
+  border-radius: 15px;
+  margin-inline: var(--space-xs);
+}
+
+[data-dialog][data-variant="filters"] ::part(summary) {
+  /* font-weight: 600; */
+  font-size: var(--step-1);
+}
+
+[data-dialog][data-variant="filters"] ::part(content) {
+  margin-left: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-dialog][data-variant="filters"]
+  .modal__container
+  header
+  [data-close-modal] {
+  background: var(--color-dark-950);
+  color: var(--color-light-50);
+  display: flex;
+  padding: var(--space-2xs);
+  & svg {
+    aspect-ratio: 1/1;
+  }
+  &:hover {
+    background: var(--color-dark-800);
+  }
+  /* padding: var(--space-s); */
+  /* width: 20px; */
+}
+
+[data-dialog][data-variant="filters"] [data-apply-filters] {
+  background: var(--color-dark-950);
+  color: var(--color-light-50);
+  margin-inline: auto;
+  width: 100%;
+  &:hover {
+    background-color: var(--color-dark-800);
+  }
+}
+
+/* @media (any-hover: hover) {
+  [data-dialog][data-variant="filters"] [data-apply-filters] {
+    width: fit-content;
+  }
+} */
