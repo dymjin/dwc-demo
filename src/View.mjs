@@ -1,6 +1,16 @@
 // import { setDefaultAnimation } from '@shoelace-style/shoelace/dist/utilities/animation-registry.js';
 import Swiper from "swiper";
 import { Navigation, /*,*/ Pagination, Parallax } from "swiper/modules";
+const swiper = new Swiper("[data-category-swiper]", {
+  // effect: "fade",
+  spaceBetween: 20,
+  modules: [Navigation, /* ,*/ Pagination, Parallax],
+  centeredSlides: true,
+  slidesPerView: "auto",
+  speed: 300,
+  parallax: true,
+  grabCursor: true,
+});
 // import Swiper and modules styles
 import "swiper/css";
 // import "swiper/css/navigation";
@@ -16,32 +26,44 @@ export default class View {
     this.#init();
   }
   #init() {
-    const openSearch = this.#getElement("[data-open-searchbar]");
-    const searchControls = this.#getElement("[data-search-controls]");
-    openSearch.addEventListener("click", () => {
-      searchControls.classList.toggle("visible");
-    });
+    // console.log(this.imagePath("./test/RAD TP01.jpg"));
+    // const openSearch = this.#getElement("[data-open-searchbar]");
+    // const searchControls = this.#getElement("[data-search-controls]");
+    // openSearch.addEventListener("click", () => {
+    //   searchControls.classList.toggle("visible");
+    // });
 
     // init category scroller
+    const parallaxBG = this.#getElement("[data-parallax-bg]");
+
     const updateCategoryBG = (category) => {
-      const parallaxBG = this.#getElement("[data-parallax-bg]");
-      parallaxBG.style.backgroundImage = `url('${this.imagePath(
-        `./${category === "LEOTARDS" ? "RAD TP01" : "RAD TR01"}.jpg`
+      // const parallaxBG = this.#getElement("[data-parallax-bg]");
+      // flag = flag ? false : true;
+
+      // console.log(flag);
+      // parallaxBG.style.opacity = 0;
+      // setTimeout(() => {
+      //   parallaxBG.style.opacity = 1;
+      // }, 300);
+      parallaxBG.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${this.imagePath(
+        `./category_swiper/${category.toLowerCase()}.jpg`
       )}')`;
       // parallaxBG.style.backGroundImage = `${category.title}`
       // bg = category.img
     };
-    const swiper = new Swiper("[data-category-swiper]", {
-      modules: [Navigation, /* ,*/ Pagination, Parallax],
-      centeredSlides: true,
-      slidesPerView: "auto",
-      speed: 600,
-      parallax: true,
-      grabCursor: true,
+
+    swiper.on("realIndexChange", function () {
+      setTimeout(() => {
+        const activeSlide = document.querySelector(".swiper-slide-active");
+        updateCategoryBG(activeSlide.dataset.category);
+      }, 200);
     });
-    swiper.on("slideChange", function () {
-      updateCategoryBG("LEOTARDS");
-    });
+    // swiper.on("slideChangeTransitionStart", function () {
+    //   parallaxBG.style.opacity = 0;
+    // });
+    // swiper.on("slideChangeTransitionEnd", function () {
+    //   parallaxBG.style.opacity = 1;
+    // });
     // init category scroller
 
     // observe header
@@ -138,7 +160,7 @@ export default class View {
           pageDirection = scroller.scrollTop > pagePrevYPos ? "down" : "up";
           pagePrevYPos = scroller.scrollTop;
           header.classList.toggle("visible", pageDirection === "up");
-          searchControls.classList.remove("visible");
+          // searchControls.classList.remove("visible");
           this.#getElement("[data-header-dropdown]").open = false;
         });
       }
@@ -158,9 +180,11 @@ export default class View {
 
     const drawers = document.querySelectorAll("[data-dialog]");
     drawers.forEach((drawer) => {
-      drawer
-        .querySelector("[data-close-modal]")
-        .addEventListener("click", () => drawer.hide());
+      const closeBtns = drawer.querySelectorAll("[data-close-modal]");
+
+      closeBtns.forEach((btn) =>
+        btn.addEventListener("click", () => drawer.hide())
+      );
     });
     const triggers = document.querySelectorAll("[data-trigger-modal]");
     triggers.forEach((trigger) => {
@@ -307,6 +331,7 @@ export default class View {
     categories.forEach((category) => {
       const categorySlide = this.#createElement("div", {
         className: "swiper-slide",
+        dataset: { category: category },
       });
       const categoryTitle = this.#createElement("h1", {
         text: category,
@@ -424,6 +449,18 @@ export default class View {
     const searchbarInput = searchControls.querySelector(".searchbar-input");
     const filterGroup = this.#getElement("[data-filter-group]");
     const filterCount = this.#getElement("[data-filter-count]");
+    const categorySlideBtns = this.#getAllElements(".category-swiper .button");
+    const inputs = filterGroup.querySelectorAll("input[type='checkbox']");
+
+    inputs.forEach((input) => (input.checked = false));
+
+    swiper.slideTo(
+      [...categorySlideBtns].findIndex(
+        (btn) =>
+          btn.dataset.viewCategory.toLowerCase() ===
+          filter.options.find((item) => item["CATEGORY"])["CATEGORY"]
+      )
+    );
 
     if (filter.options.length > 0) {
       filter.options.forEach((option, idx) => {
@@ -442,12 +479,15 @@ export default class View {
   // fillFilterOptions(options) {
 
   // }
+
   getFilterOBJ() {
     let obj = {};
     const searchControls = this.#getElement("[data-search-controls]");
     const searchbarInput = searchControls.querySelector(".searchbar-input");
     const filterGroup = this.#getElement("[data-filter-group]");
     const inputs = filterGroup.querySelectorAll("input[type='checkbox']");
+    const swiperSlideActive = document.querySelector(".swiper-slide-active");
+    const activeBtn = swiperSlideActive.querySelector(".button");
     let mappedCheckboxes = [];
     inputs.forEach(() => {
       const filledCheckboxes = [...inputs].filter((input) => input.checked);
@@ -459,8 +499,23 @@ export default class View {
       return;
     });
 
+    const categoryOption = mappedCheckboxes.find((obj) => obj["CATEGORY"]);
+    categoryOption["CATEGORY"] = activeBtn.dataset.viewCategory.toLowerCase();
+
+    // if (categoryOption) {
+    // } else {
+    //   mappedCheckboxes.push({
+    //     CATEGORY: activeBtn.dataset.viewCategory.toLowerCase(),
+    //   });
+    // }
+
+    // mappedCheckboxes.push({
+    //   CATEGORY: activeBtn.datset.viewCategory.toLowerCase(),
+    // });
     obj.searchStr = searchbarInput.value;
     obj.options = mappedCheckboxes;
+
+    // obj.options[]
     return obj;
   }
 
@@ -470,6 +525,7 @@ export default class View {
     const inputs = filterGroup.querySelectorAll("input[type='checkbox']");
     const searchForm = this.#getElement("[data-products-searchbar-form]");
     const filterCount = this.#getElement("[data-filter-count]");
+    const categorySlideBtns = this.#getAllElements(".category-swiper .button");
     // filterGroup
     applyFilters.addEventListener("click", () => {
       handler(this.getFilterOBJ());
@@ -477,6 +533,11 @@ export default class View {
 
     inputs.forEach((input) => {
       input.addEventListener("click", (ev) => {
+        swiper.slideTo(
+          [...categorySlideBtns].findIndex(
+            (btn) => btn.dataset.viewCategory.toLowerCase() === ev.target.value
+          )
+        );
         const filterGroup = input.parentElement.parentElement;
         filterGroup.querySelectorAll("input").forEach((input) => {
           if (ev.target !== input) {
@@ -497,6 +558,18 @@ export default class View {
     searchForm.addEventListener("submit", (ev) => {
       ev.preventDefault();
       handler(this.getFilterOBJ());
+    });
+
+    categorySlideBtns.forEach((btn) => {
+      btn.addEventListener("click", (ev) => {
+        swiper.slideTo(
+          [...categorySlideBtns].findIndex((btn) => btn === ev.target)
+        );
+        [...inputs].find(
+          (input) => input.value === btn.dataset.viewCategory.toLowerCase()
+        ).checked = true;
+        handler(this.getFilterOBJ());
+      });
     });
   }
   // filters
