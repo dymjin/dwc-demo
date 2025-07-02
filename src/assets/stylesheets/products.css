@@ -1,3 +1,54 @@
+.product-list {
+  /* columns: 2 auto; */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  /* place-items: center; */
+  gap: var(--space-xs);
+  padding: var(--space-2xs);
+}
+
+.product-list [data-product] {
+  --flow-space: var(--space-2xs);
+  /* break-inside: avoid; */
+  /* margin-bottom: var(--space-xs); */
+}
+
+@media (any-hover: hover) {
+  .product-list {
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+
+    /* columns: 4 auto; */
+  }
+}
+
+.product-list [data-product] img {
+  /* box-shadow: 0 0 10px var(--color-light-400); */
+
+  border-radius: var(--radius);
+  height: var(--product-h-250-500);
+  /* height: 400px; */
+  width: 100%;
+  /* width: calc(100vw - calc(var(--space-2xs) * 3)); */
+  object-fit: cover;
+}
+
+/* .product-list [data-product]  {
+  margin-top: var(--space-xs);
+} */
+
+.product-list [data-product] hgroup h2 {
+  /* text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap; */
+  font-size: var(--step-2);
+  font-family: "Inter";
+  font-weight: normal;
+}
+.product-list [data-product] hgroup p {
+  color: var(--color-dark-800);
+}
+
 .product-slider {
   margin-top: 2rem;
   display: grid;
@@ -744,12 +795,24 @@ article[data-test-dropdown] [data-color-list] div {
   /* padding: 10px; */
 }
 
-.category-swiper .swiper-slide button{
+.category-swiper .swiper-slide button {
+  background-color: transparent;
+  color: var(--color-light-50);
+  box-shadow: 0 0 0 2px inset white;
+  /* border: 2px solid var(--color-light-50); */
+
+  transition: box-shadow var(--transition-base), color var(--transition-base),
+    background-color var(--transition-base);
   margin-top: 0.5rem;
+
   border-radius: 0.5rem;
   font-size: var(--step-0);
-  &:hover {
-    background-color: var(--color-primary-700);
+  &:hover,
+  &:focus {
+    background-color: var(--color-primary-600);
+    box-shadow: none;
+
+    /* color: ; */
   }
 }
 
@@ -761,8 +824,7 @@ article[data-test-dropdown] [data-color-list] div {
 
 .parallax-bg {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("./../imgs/category_swiper/leotards.jpg") center / cover
-      no-repeat fixed;
+    url("./../imgs/category_swiper/leotards.jpg") center / cover no-repeat fixed;
   /* opacity: 0; */
   /* transition: opacity 3000ms; */
   position: absolute;
