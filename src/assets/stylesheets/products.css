@@ -1,3 +1,8 @@
+.products {
+  padding-block-end: var(--region-space);
+}
+
+
 .product-list {
   /* columns: 2 auto; */
   display: grid;
@@ -22,31 +27,37 @@
   }
 }
 
-.product-list [data-product] img {
-  /* box-shadow: 0 0 10px var(--color-light-400); */
+.product-list [data-product] header {
+  overflow: hidden;
+}
 
+.product-list [data-product]:has(h2:hover) header > img {
+  transform: scale(1.2);
+}
+
+.product-list [data-product] :is(h2:hover, h2:focus) {
+  color: var(--color-primary-600);
+  cursor: pointer;
+}
+
+.product-list [data-product]:has(img:hover) h2 {
+  color: var(--color-primary-600);
+  cursor: pointer;
+}
+
+.product-list [data-product] img {
   border-radius: var(--radius);
   height: var(--product-h-250-500);
   /* height: 400px; */
   width: 100%;
   /* width: calc(100vw - calc(var(--space-2xs) * 3)); */
   object-fit: cover;
-}
-
-[data-load-more] {
-  width: min(300px, 100%);
-  color: var(--color-light-50);
-  text-transform: uppercase;
-  display: none;
-  margin-inline: auto;
-  &:focus, &:hover {
-    background-color: var(--color-dark-950);
-    color: var(--color-light-50);
+  transition: transform var(--transition-base);
+  &:hover,
+  &:focus {
+    transform: scale(1.2);
+    cursor: pointer;
   }
-}
-
-[data-load-more].visible {
-  display: block;
 }
 
 /* .product-list [data-product]  {
@@ -54,6 +65,7 @@
 } */
 
 .product-list [data-product] hgroup h2 {
+  transition: color var(--transition-base);
   /* text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap; */
@@ -64,6 +76,26 @@
 .product-list [data-product] hgroup p {
   color: var(--color-dark-800);
 }
+
+[data-load-more] {
+  width: min(300px, 100%);
+  color: var(--color-light-50);
+  text-transform: uppercase;
+  display: none;
+  margin-inline: auto;
+  &:focus,
+  &:hover {
+    background-color: var(--color-dark-950);
+    color: var(--color-light-50);
+  }
+}
+
+[data-load-more].visible {
+  display: block;
+}
+
+
+
 
 .product-slider {
   margin-top: 2rem;
