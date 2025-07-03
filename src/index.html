@@ -117,7 +117,6 @@
             </div>
           </nav>
         </div>
-        
       </header>
       <main>
         <section id="welcome" class="welcome" data-section>
@@ -273,7 +272,7 @@
         </div>
       </footer>
       <!-- MODALS -->
-      <sl-drawer data-dialog="cart" no-header>
+      <sl-drawer data-dialog="cart" no-header data-variant="cart">
         <div
           class="modal__container"
           role="dialog"
@@ -303,15 +302,61 @@
                   </div>
                   <button class="button">[COLOR PICKER]</button>
 
-                  <select name="test" id="select-1">
+                  <select name="test">
                     <option value="" disabled selected hidden>Size</option>
                     <option value="test">12cm</option>
                     <option value="test">Adult</option>
                     <option value="test">Age 10 to 2</option>
                   </select>
                 </div>
-                <label for="qty">Qty</label>
-                <input id="qty" type="number" value="2" />
+
+                <label>
+                  <p>Qty</p>
+                  <input type="number" value="2" />
+                </label>
+              </div>
+              <div class="cart-item repel" data-nowrap>
+                <img src="./assets/imgs/RAD TP01.jpg" alt="" />
+                <div>
+                  <h2>Cart item</h2>
+                  <div class="item__price">
+                    R<span data-cart-item-price>1240.30</span>
+                  </div>
+                  <button class="button">[COLOR PICKER]</button>
+
+                  <select name="test">
+                    <option value="" disabled selected hidden>Size</option>
+                    <option value="test">12cm</option>
+                    <option value="test">Adult</option>
+                    <option value="test">Age 10 to 2</option>
+                  </select>
+                </div>
+
+                <label>
+                  <p>Qty</p>
+                  <input type="number" value="2" />
+                </label>
+              </div>
+              <div class="cart-item repel" data-nowrap>
+                <img src="./assets/imgs/RAD TP01.jpg" alt="" />
+                <div>
+                  <h2>Cart item</h2>
+                  <div class="item__price">
+                    R<span data-cart-item-price>1240.30</span>
+                  </div>
+                  <button class="button">[COLOR PICKER]</button>
+
+                  <select name="test">
+                    <option value="" disabled selected hidden>Size</option>
+                    <option value="test">12cm</option>
+                    <option value="test">Adult</option>
+                    <option value="test">Age 10 to 2</option>
+                  </select>
+                </div>
+                <label>
+                  <p>Qty</p>
+                  <input type="number" value="2" />
+                </label>
               </div>
             </ul>
             <footer class="flow">
@@ -331,7 +376,7 @@
                   R<span data-cart-subtotal>0</span>
                 </div>
               </div>
-              <div class="flow repel" data-nowrap>
+              <div class="buttons" data-nowrap>
                 <a
                   class="button | w-full"
                   data-variant="checkout"
@@ -417,9 +462,30 @@
                 <label
                   ><input
                     name="CATEGORY"
+                    value="shoes"
+                    type="checkbox"
+                  />Shoes</label
+                >
+                <label
+                  ><input
+                    name="CATEGORY"
+                    value="tights"
+                    type="checkbox"
+                  />Tights</label
+                >
+                <label
+                  ><input
+                    name="CATEGORY"
                     value="pants"
                     type="checkbox"
                   />Pants</label
+                >
+                <label
+                  ><input
+                    name="CATEGORY"
+                    value="footware"
+                    type="checkbox"
+                  />Footware</label
                 >
                 <label
                   ><input
@@ -480,8 +546,12 @@
               ></tc-range-slider> -->
             </div>
             <button class="button" data-close-modal data-apply-filters>
-              <p>Apply filters</p>|
+              <p>Apply filters</p>
+              |
               <span data-filter-count>0</span>
+            </button>
+            <button class="button" data-close-modal data-clear-filters>
+              Clear filters
             </button>
           </div>
         </div>
@@ -531,39 +601,44 @@
           aria-modal="true"
           aria-labelledby="filters"
         >
-        <div class="search-controls" data-search-controls>
-          <div id="searchbar" class="product-search-controls">
-            <form class="searchbar-form" data-products-searchbar-form>
-              <label for="products-searchbar" class="visually-hidden"
-                >Search products:</label
-              >
-              <button type="submit" class="button" data-variant="search" data-close-modal>
-                <i class="fa-solid fa-search"></i>
-              </button>
-              <input
-                class="searchbar-input"
-                value=""
-                type="search"
-                name="product_search"
-                id="products-searchbar"
-                placeholder="Search products"
-                autocomplete="off"
-              />
-              <button
-                type="button"
-                class="button"
-                data-variant="open-product-filters"
-                data-trigger-modal="filters"
-              >
-                <i class="fa-solid fa-filter"></i>
-                <span data-desktop-only>Filters</span>
-              </button>
-            </form>
-            <!-- <div>
+          <div class="search-controls" data-search-controls>
+            <div id="searchbar" class="product-search-controls">
+              <form class="searchbar-form" data-products-searchbar-form>
+                <label for="products-searchbar" class="visually-hidden"
+                  >Search products:</label
+                >
+                <button
+                  type="submit"
+                  class="button"
+                  data-variant="search"
+                  data-close-modal
+                >
+                  <i class="fa-solid fa-search"></i>
+                </button>
+                <input
+                  class="searchbar-input"
+                  value=""
+                  type="search"
+                  name="product_search"
+                  id="products-searchbar"
+                  placeholder="Search products"
+                  autocomplete="off"
+                />
+                <button
+                  type="button"
+                  class="button"
+                  data-variant="open-product-filters"
+                  data-trigger-modal="filters"
+                >
+                  <i class="fa-solid fa-filter"></i>
+                  <span data-desktop-only>Filters</span>
+                </button>
+              </form>
+              <!-- <div>
            
             </div> -->
+            </div>
           </div>
-        </div>
         </div>
       </sl-dialog>
     </div>
