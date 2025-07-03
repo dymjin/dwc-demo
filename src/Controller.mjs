@@ -1,4 +1,3 @@
-import Fuse from "fuse.js";
 export default class Controller {
   constructor(model, view) {
     this.model = model;
@@ -7,9 +6,15 @@ export default class Controller {
     this.view.formatEmail(this.model.cartItems);
 
     this.view.displayCategories(this.model.getCategories());
-    if (Object.keys(this.model.productFilters).length > 0) {
+    if (
+      this.model.productFilters.searchStr !== "" ||
+      this.model.productFilters.options.length > 0
+    ) {
       this.view.updateFilterInputs(this.model.productFilters);
+      this.onFiltersChanged();
     }
+
+    this.view.bindViewMoreProducts(this.handleViewMoreProducts);
 
     // this.view.bindChangeCategory(this.handleChangeCategory);
     // this.view.bindChangeCategory();
@@ -42,7 +47,7 @@ export default class Controller {
     // });
     // this.view.fillFilterOptions()
     this.view.bindChangeFilters(this.handleChangeFilters);
-
+    this.view.bindClearFilters(this.handleClearFilters);
     // filters
 
     // cart
@@ -53,17 +58,26 @@ export default class Controller {
   }
 
   // category
-  handleChangeCategory = (category) => {};
   // category
 
   // products
   handleReqProduct = (id) => {
     this.view.fillProductModal(this.model.getUniqProduct(id));
   };
+
+  handleViewMoreProducts = () => {
+    const filteredProducts = this.filterProducts(this.model.productFilters);
+    const filteredUniq = this.model.getFilteredInUniq(filteredProducts);
+    this.view.displayMoreProducts(filteredUniq);
+  };
   // products
 
   // filter
   handleChangeFilters = (filters) => {
+    this.model.updateFilters(filters);
+  };
+
+  handleClearFilters = (filters) => {
     this.model.updateFilters(filters);
   };
 
@@ -127,7 +141,8 @@ export default class Controller {
     //   .map((product) => product["item"]);
     // console.log(filteredUniq);
     this.view.updateFilterInputs(this.model.productFilters);
-    // this.view.displayProducts(filteredUniq);
+    this.view.clearDOMProducts();
+    this.view.displayProducts(filteredUniq);
     // this.view.bindReqProduct(this.handleReqProduct);
   };
   // filter
