@@ -65,40 +65,28 @@ setDefaultAnimation("drawer.hideEnd", {
   },
 });
 setDefaultAnimation("drawer.overlay.show", {
-  keyframes: [
-      { opacity: "0" },
-    { opacity: "1" },
-  ],
+  keyframes: [{ opacity: "0" }, { opacity: "1" }],
   options: {
     duration: 200,
     easing: "ease",
   },
 });
 setDefaultAnimation("drawer.overlay.hide", {
-  keyframes: [
-    { opacity: "1" },
-    { opacity: "0" },
-  ],
+  keyframes: [{ opacity: "1" }, { opacity: "0" }],
   options: {
     duration: 200,
     easing: "ease",
   },
 });
 setDefaultAnimation("dialog.overlay.show", {
-  keyframes: [
-    { opacity: "0" },
-    { opacity: "1" },
-  ],
+  keyframes: [{ opacity: "0" }, { opacity: "1" }],
   options: {
     duration: 200,
     easing: "ease",
   },
 });
 setDefaultAnimation("dialog.overlay.hide", {
-  keyframes: [
-    { opacity: "1" },
-    { opacity: "0" },
-  ],
+  keyframes: [{ opacity: "1" }, { opacity: "0" }],
   options: {
     duration: 200,
     easing: "ease",
