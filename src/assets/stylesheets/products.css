@@ -33,6 +33,22 @@
   object-fit: cover;
 }
 
+[data-load-more] {
+  width: min(300px, 100%);
+  color: var(--color-light-50);
+  text-transform: uppercase;
+  display: none;
+  margin-inline: auto;
+  &:focus, &:hover {
+    background-color: var(--color-dark-950);
+    color: var(--color-light-50);
+  }
+}
+
+[data-load-more].visible {
+  display: block;
+}
+
 /* .product-list [data-product]  {
   margin-top: var(--space-xs);
 } */
