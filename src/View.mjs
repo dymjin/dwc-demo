@@ -11,6 +11,7 @@ const swiper = new Swiper("[data-category-swiper]", {
   parallax: true,
   grabCursor: true,
 });
+
 // import Swiper and modules styles
 import "swiper/css";
 // import "swiper/css/navigation";
@@ -368,6 +369,7 @@ export default class View {
         product: "",
         id: product["ITEM CODE"],
         triggerModal: "product",
+        // index: idx,
       },
       className: "flow",
     });
@@ -381,10 +383,12 @@ export default class View {
         //   Math.random() * 5 + 1
         // )}.jpg`,
         // src: `/src/assets/imgs/product_1.jpg`,
-        alt: "img desc",
+        alt: "img",
       },
     });
-    img.src = this.imagePath(`./${product["ITEM CODE"]}.jpg`);
+    let randomNum = Math.floor(Math.random() * 10);
+    // console.log(randomNum)
+    img.src = this.imagePath(`./products/${randomNum}.jpg`);
     // console.log(this.imagePath("./product_1.jpg"));
 
     header.append(img);
@@ -407,11 +411,59 @@ export default class View {
     return wrapper;
   }
 
-  displayProducts(products) {
+  clearDOMProducts() {
     const productList = this.#getElement("[data-product-list]");
     productList.replaceChildren();
-    products.forEach((product) => {
+  }
+
+  displayProducts(products) {
+    const productList = this.#getElement("[data-product-list]");
+    [...products].slice(0, 12).forEach((product) => {
       productList.append(this.#createProductItem(product));
+    });
+    [...productList.children].forEach((child, idx) => {
+      child.dataset.index = idx;
+    });
+
+    const loadMoreBtn = this.#getElement("[data-load-more]");
+    if (products.length > 12) {
+      if (!loadMoreBtn.classList.contains("visible")) {
+        loadMoreBtn.classList.add("visible");
+      }
+    } else {
+      loadMoreBtn.classList.remove("visible");
+    }
+  }
+
+  displayMoreProducts(products) {
+    let index = 0;
+    const limit = 12;
+    const productList = this.#getElement("[data-product-list]");
+    const lastChild = productList.lastElementChild;
+    [...products]
+      .slice(+lastChild.dataset.index + 1, +lastChild.dataset.index + 1 + limit)
+      .forEach((product) => {
+        productList.append(this.#createProductItem(product));
+      });
+    [...productList.children].forEach((child, idx) => {
+      child.dataset.index = idx;
+      index = idx;
+    });
+    const loadMoreBtn = this.#getElement("[data-load-more]");
+    if (
+      loadMoreBtn.classList.contains("visible") &&
+      index + 1 < products.length
+    ) {
+      loadMoreBtn.classList.add("visible");
+    } else {
+      loadMoreBtn.classList.remove("visible");
+    }
+  }
+
+  bindViewMoreProducts(handler) {
+    const loadMoreBtn = this.#getElement("[data-load-more]");
+    loadMoreBtn.addEventListener("click", () => {
+      handler();
     });
   }
 
@@ -452,15 +504,18 @@ export default class View {
     const categorySlideBtns = this.#getAllElements(".category-swiper .button");
     const inputs = filterGroup.querySelectorAll("input[type='checkbox']");
 
-    inputs.forEach((input) => (input.checked = false));
-
-    swiper.slideTo(
-      [...categorySlideBtns].findIndex(
-        (btn) =>
-          btn.dataset.viewCategory.toLowerCase() ===
-          filter.options.find((item) => item["CATEGORY"])["CATEGORY"]
-      )
-    );
+    if (filter.options.find((item) => item["CATEGORY"])) {
+      inputs.forEach((input) => (input.checked = false));
+      swiper.slideTo(
+        [...categorySlideBtns].findIndex(
+          (btn) =>
+            btn.dataset.viewCategory.toLowerCase() ===
+            filter.options.find((item) => item["CATEGORY"])["CATEGORY"]
+        )
+      );
+    } else {
+      swiper.slideTo(0);
+    }
 
     if (filter.options.length > 0) {
       filter.options.forEach((option, idx) => {
@@ -500,7 +555,9 @@ export default class View {
     });
 
     const categoryOption = mappedCheckboxes.find((obj) => obj["CATEGORY"]);
-    categoryOption["CATEGORY"] = activeBtn.dataset.viewCategory.toLowerCase();
+    if (categoryOption) {
+      categoryOption["CATEGORY"] = activeBtn.dataset.viewCategory.toLowerCase();
+    }
 
     // if (categoryOption) {
     // } else {
@@ -565,11 +622,24 @@ export default class View {
         swiper.slideTo(
           [...categorySlideBtns].findIndex((btn) => btn === ev.target)
         );
+        const inputGroup = document.querySelectorAll(
+          '.filters [name="CATEGORY"]'
+        );
+        inputGroup.forEach((input) => (input.checked = false));
+        // const inputGroup = [...inputs].filter(input => input.getAttribute("name") === input.getAttribute('name'));
         [...inputs].find(
           (input) => input.value === btn.dataset.viewCategory.toLowerCase()
         ).checked = true;
         handler(this.getFilterOBJ());
       });
+    });
+  }
+
+  bindClearFilters(handler) {
+    const clearFilters = this.#getElement("[data-clear-filters]");
+
+    clearFilters.addEventListener("click", () => {
+      handler({ searchStr: "", options: [] });
     });
   }
   // filters
