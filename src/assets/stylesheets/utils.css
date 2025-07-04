@@ -729,6 +729,17 @@ button[data-variant="bullet"][data-current-bullet] {
   }
 }
 
+[data-dialog][data-variant="product"] .add-to-cart-popup::part(popup) {
+  background-color: var(--color-light-50);
+  box-shadow: 0 0 5px var(--color-dark-800);
+  border-radius: 0.5rem;
+  padding: var(--space-2xs);
+}
+
+[data-dialog][data-variant="product"] .add-to-cart-popup::part(arrow) {
+  background-color: var(--color-light-50);
+}
+
 [data-dialog][data-variant="product"] .btns [data-variant="open-cart"] {
   background-color: var(--color-dark-950);
   color: var(--color-light-50);
