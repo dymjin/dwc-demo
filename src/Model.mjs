@@ -8,8 +8,6 @@ export default class Model {
   }
 
   // util
- 
-
   #commit(storageType, name, value) {
     storageType.setItem(name, JSON.stringify(value));
   }
@@ -131,13 +129,11 @@ export default class Model {
     this.#commit(localStorage, "cart_items", this.cartItems);
   }
 
-  addCartItem(description, price, id, qty, size, colour) {
+  addCartItem(id, qty, currSize, currColour, allSizes, allColours) {
     const duplicateItem = [...this.cartItems].find((item) => {
       return (
-        item["description"] === description &&
-        item["price"] === price &&
-        item["size"] === size &&
-        item["colour"] === colour &&
+        item["size"] === currSize &&
+        item["colour"] === currColour &&
         item["id"] === id
       );
     });
@@ -145,7 +141,14 @@ export default class Model {
       this.updateCartItemQty(duplicateItem);
       this.#commit(localStorage, "cart_items", this.cartItems);
     } else {
-      this.cartItems.push({ description, price, id, qty, size, colour });
+      this.cartItems.push({
+        id,
+        qty,
+        currSize,
+        currColour,
+        allSizes,
+        allColours,
+      });
       this.onCartChanged();
     }
   }
