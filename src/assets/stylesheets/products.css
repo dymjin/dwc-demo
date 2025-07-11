@@ -1,7 +1,5 @@
-.products {
-  padding-block-end: var(--region-space);
-}
-
+/* .products {
+} */
 
 .product-list {
   /* columns: 2 auto; */
@@ -10,6 +8,9 @@
 
   /* place-items: center; */
   gap: var(--space-xs);
+}
+
+.product-list:has(:first-child) {
   padding: var(--space-2xs);
 }
 
@@ -83,6 +84,7 @@
   text-transform: uppercase;
   display: none;
   margin-inline: auto;
+  margin-block-end: var(--region-space);
   &:focus,
   &:hover {
     background-color: var(--color-dark-950);
@@ -93,9 +95,6 @@
 [data-load-more].visible {
   display: block;
 }
-
-
-
 
 .product-slider {
   margin-top: 2rem;

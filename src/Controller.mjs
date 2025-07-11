@@ -3,34 +3,22 @@ export default class Controller {
     this.model = model;
     this.view = view;
 
-    this.view.formatEmail(this.model.cartItems);
+    // this.view.formatEmail(this.model.cartItems);
 
     this.view.displayCategories(this.model.getCategories());
+
     if (
-      this.model.productFilters.searchStr !== "" ||
-      this.model.productFilters.options.length > 0
+      !!this.model.productFilters.searchStr ||
+      this.model.productFilters?.options?.length > 0
     ) {
       this.view.updateFilterInputs(this.model.productFilters);
       this.onFiltersChanged();
+    } else {
+      this.view.bindReqProduct(this.handleReqProduct);
     }
-
     this.view.bindViewMoreProducts(this.handleViewMoreProducts);
 
-    // this.view.bindChangeCategory(this.handleChangeCategory);
-    // this.view.bindChangeCategory();
-    // this.view.updateCategoryBG("balls");
-    // this.view.displayProducts([
-    //   this.model.uniqProducts[0],
-    //   this.model.uniqProducts[1],
-    //   this.model.uniqProducts[1],
-    //   this.model.uniqProducts[1],
-    //   this.model.uniqProducts[1],
-    // ]);
-    // this.view.displayProduct(this.model.uniqProducts[1]);
-
-    this.view.bindReqProduct(this.handleReqProduct);
     // init
-    // this.view.fillCategoryList(this.model.getCategories());
     // this.view.fillFilterOptions({
     //   categories: this.model.getCategories(),
     //   priceRange: this.model.getPriceRange(),
@@ -39,21 +27,22 @@ export default class Controller {
 
     // filters
     this.model.bindFiltersChanged(this.onFiltersChanged);
-    // this.model.updateFilters({
-    //   searchStr: "strappy",
-    //   options: [{ COLOUR: "navy" }, { COLOUR: "pink" }],
-
-    //   // SIZE: ["med", "lrg", "10 to 10.5", "Adult"],
-    // });
-    // this.view.fillFilterOptions()
     this.view.bindChangeFilters(this.handleChangeFilters);
     this.view.bindClearFilters(this.handleClearFilters);
     // filters
 
     // cart
     this.model.bindCartChanged(this.onCartChanged);
-    // this.model.addCartItem("test", 20.3, "fp2d1d", 2, "1 to 5", "blue");
-    // this.model.editCartItem({ colour: "red" }, 0);
+    this.view.bindCreateCartItem(this.handleAddCartItem);
+    this.view.displayCart(this.model.cartItems);
+    this.view.bindRemoveCartItem(this.handleRemoveCartItem);
+    this.view.bindEditCartItems();
+    this.view.bindUpdateCartItems(this.handleUpdateCartItems);
+    this.view.bindClearCart(this.handleClearCart);
+    this.view.bindUpdateCartItemQty(this.handleUpdateCartItemQty);
+    this.view.bindFormatEmail(this.handleFormatEmail);
+
+    // this.view.bindUpdateCartItemQty(this.handleUpdateCartItemQty);
     // cart
   }
 
@@ -61,14 +50,16 @@ export default class Controller {
   // category
 
   // products
-  handleReqProduct = (id) => {
-    this.view.fillProductModal(this.model.getUniqProduct(id));
+  handleReqProduct = (id, randomImgNum) => {
+    this.view.fillProductModal(this.model.getUniqProduct(id), randomImgNum);
+    this.view.updateProductImgModal(randomImgNum);
   };
 
   handleViewMoreProducts = () => {
     const filteredProducts = this.filterProducts(this.model.productFilters);
     const filteredUniq = this.model.getFilteredInUniq(filteredProducts);
     this.view.displayMoreProducts(filteredUniq);
+    this.view.bindReqProduct(this.handleReqProduct);
   };
   // products
 
@@ -77,8 +68,10 @@ export default class Controller {
     this.model.updateFilters(filters);
   };
 
-  handleClearFilters = (filters) => {
-    this.model.updateFilters(filters);
+  handleClearFilters = () => {
+    this.model.clearFilters();
+    // this.model.updateFilters({ searchStr: "", options: [] });
+    // this.view.updateFilterInputs({});
   };
 
   filterProducts = (filter) => {
@@ -91,7 +84,6 @@ export default class Controller {
           .includes(filter.searchStr.toLowerCase().replaceAll(" ", ""));
       });
     }
-    // console.log(filteredProducts)
     if (filter?.options?.length > 0) {
       const categoryOBJ = filter.options.find(
         (item) => Object.keys(item)[0] === "CATEGORY"
@@ -101,20 +93,15 @@ export default class Controller {
           return product["CATEGORY"].toLowerCase() === categoryOBJ["CATEGORY"];
         });
       }
-      // console.log(filteredProducts)
 
       filter.options.forEach((option) => {
         if (Object.keys(option)[0].toLowerCase() !== "category") {
           filteredProducts = [...filteredProducts].filter((product) => {
-            // console.log(
-            //   product[Object.keys(option)[0]].toString().replace(/[\d\. ]/g, "")
-            // );
-            // console.log(product[Object.keys(option)[0]].replace(/[\d\. ]/g, ""))
             return (
               product[Object.keys(option)[0]] !== null &&
               product[Object.keys(option)[0]]
                 .toString()
-                .replace(/[\d\. ]/g, "")
+                // .replace(/[\d\. ]/g, "")
                 .toLowerCase() === option[Object.keys(option)[0]].toLowerCase()
             );
           });
@@ -125,31 +112,90 @@ export default class Controller {
   };
 
   onFiltersChanged = () => {
-    const filteredProducts = this.filterProducts(this.model.productFilters);
-    const filteredUniq = this.model.getFilteredInUniq(filteredProducts);
-    console.log(filteredProducts);
-    console.log(filteredUniq);
-    // const fuse = new Fuse([...this.model.products], {
-    //   keys: filterKeys,
-    //   useExtendedSearch: true,
-    //   findAllMatches: true,
-    // });
-    // const filteredProducts = fuse
-    //   .search({
-    //     $and: [this.model.productFilters],
-    //   })
-    //   .map((product) => product["item"]);
-    // console.log(filteredUniq);
-    this.view.updateFilterInputs(this.model.productFilters);
     this.view.clearDOMProducts();
-    this.view.displayProducts(filteredUniq);
-    // this.view.bindReqProduct(this.handleReqProduct);
+    this.view.emptyFilterInputs();
+    if (Object.keys(this.model.productFilters)?.length > 0) {
+      const filteredProducts = this.filterProducts(this.model.productFilters);
+      const filteredUniq = this.model.getFilteredInUniq(filteredProducts);
+      this.view.updateFilterInputs(this.model.productFilters);
+      this.view.displayProducts(filteredUniq);
+      this.view.bindReqProduct(this.handleReqProduct);
+    }
   };
   // filter
 
   // cart
   onCartChanged = () => {
     this.model.updateCart();
+    this.view.displayCart(this.model.cartItems);
+    this.view.bindRemoveCartItem(this.handleRemoveCartItem);
+    this.view.bindEditCartItems();
+    this.view.bindUpdateCartItemQty(this.handleUpdateCartItemQty);
+  };
+
+  handleAddCartItem = (
+    id,
+    qty,
+    description,
+    currSize,
+    currColour,
+    randomImgNum,
+    currRandomClr
+  ) => {
+    const uniqItem = this.model.getUniqProduct(id);
+    const product = this.model.getProduct({
+      id,
+      currSize,
+      currColour,
+    });
+    if (product) {
+      this.model.addCartItem(
+        id,
+        qty,
+        product["PRICE"],
+        description,
+        currSize,
+        currColour,
+        uniqItem["SIZE"],
+        uniqItem["COLOUR"],
+        randomImgNum,
+        uniqItem["randomColours"],
+        currRandomClr
+      );
+      this.view.addToCartSuccess();
+    } else {
+      this.view.errorInvalidAddToCart("Could not find colour/size combination");
+    }
+  };
+
+  handleUpdateCartItems = (changes) => {
+    this.model.editCartItems(changes);
+  };
+
+  handleRemoveCartItem = (idx) => {
+    this.model.removeCartItem(idx);
+    if (this.model.cartItems?.length <= 0) {
+      this.view.clearCartTotals();
+    }
+  };
+
+  handleClearCart = () => {
+    this.model.clearCart();
+    this.view.displayCart();
+  };
+
+  handleUpdateCartItemQty = (index, qty, modeOBJ) => {
+    this.model.updateCartItemQty(this.model.getCartItem(index), qty, modeOBJ);
+    this.model.updateCart();
+    // this.view.bindUpdateCartItemQty(this.handleUpdateCartItemQty);
+    this.view.updateCartSubtotal(this.model.cartItems);
+    this.view.updateCartTotalItems(this.model.cartItems);
+
+    // this.onCartChanged();
+  };
+
+  handleFormatEmail = () => {
+    this.view.formatEmail(this.model.cartItems);
   };
   // cart
 }

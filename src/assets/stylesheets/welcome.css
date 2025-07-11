@@ -1,4 +1,12 @@
 /* welcome */
+
+sl-drawer::part(base) {
+  z-index: 100;
+}
+sl-dialog::part(base) {
+  z-index: 200;
+}
+
 .welcome {
   /* width: 100vw; */
   display: flex;

@@ -5,9 +5,41 @@ export default class Model {
     this.productFilters = this.#getFilters() || {};
     this.#getUniqProductVariants() || this.#setUniqProductVariants();
     this.uniqProducts = this.#getUniqProductVariants();
+    this.randomColors = [
+      "#fdc700",
+      "#c10007",
+      "#024a70",
+      "#e9d4ff",
+      "#fb64b6",
+      "#6e11b0",
+      "#ff2056",
+      "#1447e6",
+      "#fafafa",
+      "#0c0a09",
+    ];
+    if (!localStorage.getItem("randomClrsDone")) {
+      this.mapToRandomColor();
+    }
+  }
+
+  // introduce random colors
+  getRandomColors(length) {
+    let randomIDX = Math.floor(
+      Math.random() * (this.randomColors.length - length)
+    );
+    return this.randomColors.slice(randomIDX, randomIDX + length);
+  }
+
+  mapToRandomColor() {
+    this.uniqProducts.forEach((product) => {
+      product.randomColours = this.getRandomColors(product["COLOUR"].length);
+    });
+    this.#commit(localStorage, "uniq_products", this.uniqProducts);
+    this.#commit(localStorage, "randomClrsDone", true);
   }
 
   // util
+
   #commit(storageType, name, value) {
     storageType.setItem(name, JSON.stringify(value));
   }
@@ -30,6 +62,15 @@ export default class Model {
   // product
   getUniqProduct(id) {
     return this.uniqProducts.find((item) => item["ITEM CODE"] === id);
+  }
+
+  getProduct(details) {
+    return this.products.find(
+      (item) =>
+        item["ITEM CODE"] === details["id"] &&
+        item["COLOUR"] === details["currColour"] &&
+        item["SIZE"] === details["currSize"]
+    );
   }
 
   #condenseProductGroup(group) {
@@ -104,16 +145,13 @@ export default class Model {
   }
   #condenseCartItems() {
     // based on and expanded on: https://stackoverflow.com/a/67796742
-    const cartItemsByID = Object.groupBy(
-      this.cartItems,
-      (item) => item.productID
-    );
+    const cartItemsByID = Object.groupBy(this.cartItems, (item) => item["id"]);
     const grouped2DArr = Object.values(cartItemsByID).map((group) => {
       return (group = group.reduce((acc, groupItem) => {
         const matchItem = acc.find(
           (item) =>
-            item["colour"] === groupItem["colour"] &&
-            item["size"] === groupItem["size"] &&
+            item["currColour"] === groupItem["currColour"] &&
+            item["currSize"] === groupItem["currSize"] &&
             item.index !== groupItem.index
         );
         matchItem ? (acc[0].qty += groupItem.qty) : acc.push(groupItem);
@@ -129,40 +167,106 @@ export default class Model {
     this.#commit(localStorage, "cart_items", this.cartItems);
   }
 
-  addCartItem(id, qty, currSize, currColour, allSizes, allColours) {
-    const duplicateItem = [...this.cartItems].find((item) => {
-      return (
-        item["size"] === currSize &&
-        item["colour"] === currColour &&
+  addCartItem(
+    id,
+    qty,
+    price,
+    description,
+    currSize,
+    currColour,
+    allSizes,
+    allColours,
+    randomImgNum,
+    randomColours,
+    currRandomClr
+  ) {
+    // console.log(currSize, currColour);
+    const duplicateItem = [...this.cartItems].find(
+      (item) =>
+        item["currSize"] === currSize &&
+        item["currRandomClr"] === currRandomClr &&
         item["id"] === id
-      );
-    });
+    );
     if (!!duplicateItem && Object.hasOwn(duplicateItem, "id")) {
-      this.updateCartItemQty(duplicateItem);
+      this.updateCartItemQty(duplicateItem, qty, { mode: "add" });
+      this.onCartChanged();
       this.#commit(localStorage, "cart_items", this.cartItems);
     } else {
       this.cartItems.push({
         id,
         qty,
+        price,
+        description,
         currSize,
         currColour,
         allSizes,
         allColours,
+        randomImgNum,
+        randomColours,
+        currRandomClr,
       });
       this.onCartChanged();
     }
+    this.#sortCart();
   }
 
-  editCartItem(changes, index) {
-    const item = [...this.cartItems].find((item) => item["index"] === index);
-    if (item) {
-      Object.keys(changes).forEach((key) => (item[key] = changes[key]));
-    }
+  #removeDuplicateItemsIncrQty(cart) {
+    // based on and expanded on: https://stackoverflow.com/a/67796742
+    const cartItemsByID = Object.groupBy(cart, (item) => item["id"]);
+    const grouped2DArr = Object.values(cartItemsByID).map((group) => {
+      return (group = group.reduce((acc, groupItem) => {
+        const matchItem = acc.find(
+          (item) =>
+            item["currRandomClr"] === groupItem["currRandomClr"] &&
+            item["currSize"] === groupItem["currSize"] &&
+            item["index"] !== groupItem["index"]
+        );
+        matchItem ? (acc[0].qty += groupItem.qty) : acc.push(groupItem);
+        return acc;
+      }, []));
+    });
+    return grouped2DArr.flat(1);
+  }
+
+  editCartItems(changes) {
+    // let itemsToEdit = [...this.cartItems].filter(item =>
+
+    // )
+    changes.forEach((change) => {
+      if (change.colour) {
+        this.cartItems[change.index]["currRandomClr"] = change.colour;
+      }
+      if (change.size) {
+        this.cartItems[change.index]["currSize"] = change.size;
+      }
+    });
+
+    this.cartItems = this.#removeDuplicateItemsIncrQty(this.cartItems);
+
     this.onCartChanged();
+    // console.log(this.cartItems)
+    // Object.keys(changes).forEach((key) => (item[key] = changes[key]));
+
+    // Object.values(changes).forEach((changeGroup) => {
+    //   changeGroup.forEach((change) => {
+    //     const item = [...this.cartItems].find(
+    //       (item) => item["index"] === +change["index"]
+    //     );
+
+    //   });
+    // });
+    // if (item) {
+    //   Object.keys(changes).forEach((key) => (item[key] = changes[key]));
+    // }
+    // this.onCartChanged();
   }
 
-  updateCartItemQty(item) {
-    item.qty = item.qty + 1;
+  updateCartItemQty(item, qty, modeOBJ) {
+    if (modeOBJ.mode === "add") {
+      item.qty = item.qty + qty;
+    } else if (modeOBJ.mode === "set") {
+      item["qty"] = qty;
+    }
   }
 
   removeCartItem(index) {
@@ -177,6 +281,10 @@ export default class Model {
 
   #getCart() {
     return JSON.parse(localStorage.getItem("cart_items"));
+  }
+
+  getCartItem(idx) {
+    return this.cartItems.find((item) => item["index"] === idx);
   }
 
   bindCartChanged(callback) {

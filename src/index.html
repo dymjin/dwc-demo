@@ -168,49 +168,49 @@
                 aliquam pariatur maxime!
               </p>
             </div>
-          </div>
-          <div class="guarentees">
-            <h1 class="w-full text-center" data-swiper-parallax="-200">
-              Guarentees
-            </h1>
-            <div class="flex" style="--flow-space: 3rem; --gutter: 2rem">
-              <article class="guarentee-card flow" style="--flow-space: 2rem">
-                <header>
-                  <h2 class="h3 w-full text-center">Support</h2>
-                </header>
-                <i
-                  class="fa-solid fa-suitcase-medical w-full text-center h1"
-                ></i>
-                <p class="text-center w-full">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit
-                  adipisci consequuntur sapiente a mollitia.
-                </p>
-              </article>
-              <article class="guarentee-card flow" style="--flow-space: 2rem">
-                <header>
-                  <h2 class="h3 w-full text-center">Quality</h2>
-                </header>
-                <i class="fa-solid fa-star w-full text-center h1"></i>
-                <p class="text-center w-full">
-                  Vel dolore minima aspernatur ipsa dignissimos nesciunt non
-                  aliquam eligendi.
-                </p>
-              </article>
-              <article class="guarentee-card flow" style="--flow-space: 2rem">
-                <header>
-                  <h2 class="h3 w-full text-center">Durability</h2>
-                </header>
-                <i class="fa-solid fa-shield w-full text-center h1"></i>
-                <p class="text-center w-full">
-                  Illo temporibus autem dolorum animi quo magni.
-                </p>
-              </article>
+            <div class="guarentees flow" style="--flow-space: 5rem">
+              <h1 class="w-full text-center" data-swiper-parallax="-200">
+                Guarentees
+              </h1>
+              <div class="flex" style="--flow-space: 3rem; --gutter: 2rem">
+                <article class="guarentee-card flow" style="--flow-space: 2rem">
+                  <header>
+                    <h2 class="h3 w-full text-center">Support</h2>
+                  </header>
+                  <i
+                    class="fa-solid fa-suitcase-medical w-full text-center h1"
+                  ></i>
+                  <p class="text-center w-full">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Velit adipisci consequuntur sapiente a mollitia.
+                  </p>
+                </article>
+                <article class="guarentee-card flow" style="--flow-space: 2rem">
+                  <header>
+                    <h2 class="h3 w-full text-center">Quality</h2>
+                  </header>
+                  <i class="fa-solid fa-star w-full text-center h1"></i>
+                  <p class="text-center w-full">
+                    Vel dolore minima aspernatur ipsa dignissimos nesciunt non
+                    aliquam eligendi.
+                  </p>
+                </article>
+                <article class="guarentee-card flow" style="--flow-space: 2rem">
+                  <header>
+                    <h2 class="h3 w-full text-center">Durability</h2>
+                  </header>
+                  <i class="fa-solid fa-shield w-full text-center h1"></i>
+                  <p class="text-center w-full">
+                    Illo temporibus autem dolorum animi quo magni.
+                  </p>
+                </article>
+              </div>
             </div>
           </div>
         </section>
         <section id="contact" class="contact" data-section>
           <div class="wrapper region flow">
-            <h2 class="text-center w-full">Contact us</h2>
+            <h1 class="text-center w-full">Contact us</h1>
             <form action="" class="flow">
               <p class="flow">
                 <label for="contact-fullname">Full name</label>
@@ -241,33 +241,31 @@
                   placeholder="Your message here..."
                 ></textarea>
               </p>
-              <a class="btn" data-btn-variant="contact" href="">Send</a>
+              <a class="button" data-btn-variant="contact" href="">Send</a>
             </form>
           </div>
         </section>
       </main>
-      <footer class="page-footer">
-        <div class="wrapper region flow">
-          <a class="branding" href="#">
-            <svg>
-              <use href="#site-logo"></use>
-            </svg>
-          </a>
-          <div class="grid" data-layout="50-50">
-            <div class="footer-links">
-              <a href="#welcome">Home</a>
-              <a href="#products">Products</a>
-              <a href="#about">About</a>
-              <a href="#contact">Contact</a>
+      <footer class="page-footer | flow">
+        <a class="branding" href="#">
+          <svg>
+            <use href="#site-logo"></use>
+          </svg>
+        </a>
+        <div class="footer-content" style="--flow-space: var(--space-l)">
+          <div class="footer-links">
+            <a href="#welcome">Home</a>
+            <a href="#products">Products</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+          </div>
+          <div class="socials">
+            <div class="links">
+              <i class="fab fa-whatsapp"></i>
+              <i class="fab fa-facebook"></i>
             </div>
-            <div class="socials">
-              <div class="links">
-                <a href=""><i class="fab fa-whatsapp"></i></a
-                ><a href=""><i class="fab fa-facebook"></i></a>
-              </div>
-              <a href="">order@dwc.co.za</a>
-              <a href="">024 235 2350</a>
-            </div>
+            <p>order@dwc.co.za</p>
+            <p>Tel : 024 235 2350</p>
           </div>
         </div>
       </footer>
@@ -291,74 +289,7 @@
                 </button>
               </form>
             </header>
-            <ul class="flow" data-cart-items>
-              <p>No items currently in cart</p>
-              <div class="cart-item repel" data-nowrap>
-                <img src="./assets/imgs/RAD TP01.jpg" alt="" />
-                <div>
-                  <h2>Cart item</h2>
-                  <div class="item__price">
-                    R<span data-cart-item-price>1240.30</span>
-                  </div>
-                  <button class="button">[COLOR PICKER]</button>
-
-                  <select name="test">
-                    <option value="" disabled selected hidden>Size</option>
-                    <option value="test">12cm</option>
-                    <option value="test">Adult</option>
-                    <option value="test">Age 10 to 2</option>
-                  </select>
-                </div>
-
-                <label>
-                  <p>Qty</p>
-                  <input type="number" value="2" />
-                </label>
-              </div>
-              <div class="cart-item repel" data-nowrap>
-                <img src="./assets/imgs/RAD TP01.jpg" alt="" />
-                <div>
-                  <h2>Cart item</h2>
-                  <div class="item__price">
-                    R<span data-cart-item-price>1240.30</span>
-                  </div>
-                  <button class="button">[COLOR PICKER]</button>
-
-                  <select name="test">
-                    <option value="" disabled selected hidden>Size</option>
-                    <option value="test">12cm</option>
-                    <option value="test">Adult</option>
-                    <option value="test">Age 10 to 2</option>
-                  </select>
-                </div>
-
-                <label>
-                  <p>Qty</p>
-                  <input type="number" value="2" />
-                </label>
-              </div>
-              <div class="cart-item repel" data-nowrap>
-                <img src="./assets/imgs/RAD TP01.jpg" alt="" />
-                <div>
-                  <h2>Cart item</h2>
-                  <div class="item__price">
-                    R<span data-cart-item-price>1240.30</span>
-                  </div>
-                  <button class="button">[COLOR PICKER]</button>
-
-                  <select name="test">
-                    <option value="" disabled selected hidden>Size</option>
-                    <option value="test">12cm</option>
-                    <option value="test">Adult</option>
-                    <option value="test">Age 10 to 2</option>
-                  </select>
-                </div>
-                <label>
-                  <p>Qty</p>
-                  <input type="number" value="2" />
-                </label>
-              </div>
-            </ul>
+            <div class="flow" data-cart-items></div>
             <footer class="flow">
               <button
                 class="button"
@@ -384,6 +315,7 @@
                   data-open-modal
                   data-modal-link="checkout"
                   data-cart-btn
+                  data-send-order
                 >
                   Send order
                 </a>
@@ -401,27 +333,32 @@
           </div>
         </div>
       </sl-drawer>
-      <sl-dialog data-dialog="empty-cart" no-header>
+      <sl-dialog data-dialog="empty-cart" no-header data-variant="empty-cart">
         <div
           class="modal__container"
           role="dialog"
           aria-modal="true"
           aria-labelledby="WARNING, empty cart"
         >
-          <div>
-            <header class="repel" data-nowrap>
+          <div class="flow">
+            <header>
               <i class="fas fa-warning"></i>
               <h1>WARNING</h1>
             </header>
             <p>Are you sure you want to delete all items from cart?</p>
             <footer>
-              <button data-variant="clear-cart" class="button" data-close-modal>
+              <button
+                data-variant="clear-cart"
+                class="button"
+                data-close-modal
+                data-empty-cart
+              >
                 Clear
               </button>
               <button
                 data-variant="cancel-empty-cart"
                 class="button"
-                data-micromodal-close
+                data-close-modal
               >
                 Cancel
               </button>
@@ -545,56 +482,151 @@
                 slider-width="min(200px, 100%)"
               ></tc-range-slider> -->
             </div>
-            <button class="button" data-close-modal data-apply-filters>
-              <p>Apply filters</p>
-              |
-              <span data-filter-count>0</span>
-            </button>
-            <button class="button" data-close-modal data-clear-filters>
-              Clear filters
-            </button>
+            <div class="btns">
+              <button class="button" data-close-modal data-apply-filters>
+                <p>Apply filters</p>
+                |
+                <span data-filter-count>0</span>
+              </button>
+              <button class="button" data-close-modal data-clear-filters>
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
           </div>
         </div>
       </sl-dialog>
       <!-- credit to Ivan Ilchenko for the inspiration of the item modal design https://dribbble.com/shots/16469717-Furniture-showcase-Mobile-interface -->
-      <sl-dialog data-dialog="product" no-header>
+      <sl-dialog data-dialog="product" no-header data-variant="product">
         <div>
-          <img src="./assets/imgs/RAD TP01.jpg" alt="" />
-          <button class="button" data-variant="zoom-product-img" data-zoom-img>
-            <i class="fas fa-magnifying-glass-plus"></i>
+          <header>
+            <img
+              src="./assets/imgs/products/8.jpg"
+              alt=""
+              data-trigger-modal="product-img"
+            />
+            <button
+              class="button"
+              data-variant="zoom-product-img"
+              data-zoom-img
+              data-trigger-modal="product-img"
+            >
+              <i class="fas fa-magnifying-glass-plus"></i>
+            </button>
+            <button class="button" data-close-modal>
+              <i class="fas fa-xmark"></i>
+            </button>
+          </header>
+
+          <!-- <summary slot="summary"> -->
+
+          <!-- <div class="product-item-categories" data-product-item-categories>
+              <span>Shoes</span><span>Fabric</span>
+            </div> -->
+          <!-- </summary> -->
+          <div class="details flow">
+            <hgroup>
+              <h1 data-product-name>Product Name</h1>
+              <div data-price>R299.02 - R300.20</div>
+            </hgroup>
+            <p data-product-description>
+              Wonderful fabric shoes for any occasion. Comfort guarenteed.
+            </p>
+            <div class="inputs flow" data-modal-inputs>
+              <div data-colors-input>
+                <h2>Colours</h2>
+                <div class="colour-list" data-colour-list>
+                  <div data-colour></div>
+                  <div data-colour></div>
+                  <div data-colour></div>
+                  <div data-colour></div>
+
+                  <div data-colour></div>
+
+                  <div data-colour></div>
+
+                  <div data-colour></div>
+                </div>
+              </div>
+              <div style="--flow-space: var(--space-m)" data-sizes-input>
+                <h2>Sizes</h2>
+                <div class="size-list" data-size-list>
+                  <div data-size>5 to 10</div>
+                  <div data-size>MED</div>
+                  <div data-size>SML</div>
+                  <div data-size>Adult</div>
+                  <div data-size>SNR</div>
+                  <div data-size>JNR</div>
+                  <div data-size>7 to 10.5</div>
+                </div>
+              </div>
+              <div style="--flow-space: var(--space-m)">
+                <h2>Qauntity</h2>
+                <div data-qty-widget>
+                  <button class="button" data-remove-qty>-</button>
+                  <input
+                    type="text"
+                    class="qty-input"
+                    value="1"
+                    maxlength="2"
+                    inputmode="numeric"
+                    data-product-qty-input
+                  />
+                  <button class="button" data-add-qty>+</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="btns">
+          <sl-popup
+            class="add-to-cart-popup"
+            placement="top"
+            arrow
+            shift
+            arrow-placement="anchor"
+            distance="8"
+          >
+            <button
+              slot="anchor"
+              class="button"
+              data-variant="add-to-cart"
+              data-add-to-cart
+            >
+              Add to cart
+            </button>
+            <div class="box">Please select a colour/size</div>
+          </sl-popup>
+
+          <button
+            class="button"
+            data-variant="open-cart"
+            data-trigger-modal="cart"
+          >
+            <i class="fas fa-cart-shopping"></i>
           </button>
+        </div>
+      </sl-dialog>
+
+      <sl-dialog data-dialog="product-img" no-header data-variant="product-img">
+        <header>
           <button class="button" data-close-modal>
             <i class="fas fa-xmark"></i>
           </button>
-          <summary slot="summary">
-            <h2 data-product-name>Product Name</h2>
-            <div data-price>R299.02 - R300.20</div>
-            <div class="product-item-categories" data-product-item-categories>
-              <span>Shoes</span><span>Fabric</span>
+          <button class="button" data-variant="zoom-product-img" data-zoom-img>
+            <i class="fas fa-magnifying-glass-plus"></i>
+          </button>
+        </header>
+        <div class="product-img-swiper" data-product-img-swiper>
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div class="swiper-zoom-container">
+                <img src="./assets/imgs/products/0.jpg" alt="" />
+              </div>
             </div>
-          </summary>
-          <p data-product-description>
-            Wonderful fabric shoes for any occasion. Comfort guarenteed.
-          </p>
-          <div class="inputs">
-            <div class="colour-list"></div>
-            <div class="size-list"></div>
-          </div>
-          <div>
-            <button class="button" data-variant="add-to-cart" data-add-to-cart>
-              Add to cart
-            </button>
-            <button
-              class="button"
-              data-variant="open-cart"
-              data-trigger-modal="cart"
-            >
-              <i class="fas fa-cart-shopping"></i>
-            </button>
           </div>
         </div>
       </sl-dialog>
-      <sl-dialog data-dialog="searchbar" no-header>
+      <sl-dialog data-dialog="searchbar" data-variant="searchbar" no-header>
         <div
           class="modal__container"
           role="dialog"

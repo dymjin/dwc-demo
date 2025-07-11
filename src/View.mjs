@@ -1,6 +1,6 @@
 // import { setDefaultAnimation } from '@shoelace-style/shoelace/dist/utilities/animation-registry.js';
 import Swiper from "swiper";
-import { Navigation, /*,*/ Pagination, Parallax } from "swiper/modules";
+import { Navigation, /*,*/ Pagination, Parallax, Zoom } from "swiper/modules";
 const swiper = new Swiper("[data-category-swiper]", {
   // effect: "fade",
   spaceBetween: 20,
@@ -10,6 +10,12 @@ const swiper = new Swiper("[data-category-swiper]", {
   speed: 300,
   parallax: true,
   grabCursor: true,
+});
+
+const productImgSwiper = new Swiper("[data-product-img-swiper]", {
+  modules: [Zoom],
+  speed: 300,
+  zoom: true,
 });
 
 // import Swiper and modules styles
@@ -25,8 +31,70 @@ export default class View {
     this.images = images;
     this.imagePath = (name) => images(name, true);
     this.#init();
+    this.cartTimeoutID = undefined;
   }
   #init() {
+    this.bindUpdateProductItemQty();
+
+    const productImgModal = this.#getElement('[data-dialog="product-img"]');
+    productImgModal
+      .querySelector("[data-zoom-img]")
+      .addEventListener("click", () => {
+        productImgSwiper.zoom.toggle();
+      });
+
+    const productZoomBtn = this.#getElement(
+      '[data-dialog="product"] [data-zoom-img]'
+    );
+    productZoomBtn.addEventListener("click", () => {
+      productImgSwiper.on("slidesUpdated", () => {
+        productImgSwiper.zoom.out();
+      });
+    });
+
+    const productImg = this.#getElement('[data-dialog="product"] header img');
+    productImg.addEventListener("click", () => {
+      productImgSwiper.on("slidesUpdated", () => {
+        productImgSwiper.zoom.out();
+      });
+    });
+
+    const colourList = this.#getElement("[data-colour-list]");
+    const sizeList = this.#getElement("[data-size-list]");
+
+    const clearSelected = (parent) => {
+      [...parent.children].forEach((child) => {
+        child.classList.remove("selected");
+      });
+    };
+
+    colourList.addEventListener("click", (ev) => {
+      if (ev.target !== colourList) {
+        clearSelected(colourList);
+        ev.target.classList.add("selected");
+      }
+    });
+
+    sizeList.addEventListener("click", (ev) => {
+      if (ev.target !== sizeList) {
+        clearSelected(sizeList);
+        ev.target.classList.add("selected");
+      }
+    });
+
+    // [...colourList.children].forEach((colour) => {
+    //   colour.addEventListener("click", () => {
+    //     clearSelected(colourList);
+    //     colour.classList.add("selected");
+    //   });
+    // });
+
+    // [...sizeList.children].forEach((size) => {
+    //   size.addEventListener("click", () => {
+    //     clearSelected(sizeList);
+    //     size.classList.add("selected");
+    //   });
+    // });
     // console.log(this.imagePath("./test/RAD TP01.jpg"));
     // const openSearch = this.#getElement("[data-open-searchbar]");
     // const searchControls = this.#getElement("[data-search-controls]");
@@ -56,7 +124,9 @@ export default class View {
     swiper.on("realIndexChange", function () {
       setTimeout(() => {
         const activeSlide = document.querySelector(".swiper-slide-active");
-        updateCategoryBG(activeSlide.dataset.category);
+        if (activeSlide) {
+          updateCategoryBG(activeSlide.dataset.category);
+        }
       }, 200);
     });
     // swiper.on("slideChangeTransitionStart", function () {
@@ -223,6 +293,19 @@ export default class View {
   }
 
   // util
+
+  bindFormatEmail(handler) {
+    this.#getElement("[data-send-order]").addEventListener("click", () => {
+      handler();
+    });
+  }
+
+  isMobile() {
+    const regex =
+      /Mobi|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+    return regex.test(navigator.userAgent);
+  }
+
   formatEmail(cart) {
     const br = "\n";
     const line = "-----------------------------";
@@ -259,9 +342,9 @@ export default class View {
       items +=
         `${idx + 1}) ${item["id"]}, ${item["description"]}\nPrice: R${item[
           "price"
-        ].toFixed(2)}\nQty: ${item["qty"]}\nSize: ${item["size"]}\nColour: ${
-          item["colour"]
-        }` +
+        ].toFixed(2)}\nQty: ${item["qty"]}\nSize: ${
+          item["currSize"]
+        }\nColour: ${item["currRandomClr"]}` +
         br +
         line +
         br;
@@ -271,14 +354,19 @@ export default class View {
     totalText = `Total: R${total.toFixed(2)}` + br + line + br + br;
 
     body = greeting + contact + address + items + totalText + comment;
-    const mailtoLink = `mailto:order@dwc.co.za?subject=${subject}&body=${encodeURIComponent(
-      body
-    )}`;
+    let mailtoLink = "";
+    if (this.isMobile()) {
+      mailtoLink = `https://wa.me/?text=${encodeURIComponent(body)}`;
+    } else {
+      mailtoLink = `mailto:order@dwc.co.za?subject=${subject}&body=${encodeURIComponent(
+        body
+      )}`;
+    }
 
-    const cartBtn = this.#getElement("[data-cart-btn]");
-    cartBtn.addEventListener("click", () => {
-      cartBtn.href = mailtoLink;
-    });
+    const cartBtn = this.#getElement("[data-send-order]");
+    // cartBtn.addEventListener("click", () => {
+    cartBtn.href = mailtoLink;
+    // });
   }
 
   #createElement(tag, props = {}) {
@@ -389,6 +477,11 @@ export default class View {
     let randomNum = Math.floor(Math.random() * 10);
     // console.log(randomNum)
     img.src = this.imagePath(`./products/${randomNum}.jpg`);
+    wrapper.dataset.randomImgNum = randomNum;
+    // wrapper.dataset.randomColors = `${this.getRandomColorList(
+    //   product["COLOUR"].length
+    // )}`;
+    // console.log(wrapper.dataset.randomColors)
     // console.log(this.imagePath("./product_1.jpg"));
 
     header.append(img);
@@ -467,27 +560,134 @@ export default class View {
     });
   }
 
-  fillProductModal(product) {
+  // getRandomColorList(length) {
+
+  // }
+
+  updateProductImgModal(randomImgNum) {
+    const modal = this.#getElement('[data-dialog="product-img"]');
+    modal.querySelector("img").src = this.imagePath(
+      `./products/${randomImgNum}.jpg`
+    );
+  }
+
+  bindUpdateProductItemQty() {
+    const modal = this.#getElement('[data-dialog="product"]');
+    const qtyWidget = modal.querySelector("[data-qty-widget]");
+    const qtyInput = qtyWidget.querySelector("[data-product-qty-input]");
+
+    qtyWidget
+      .querySelector("[data-remove-qty]")
+      .addEventListener("click", () => {
+        if (+qtyInput.value - 1 >= 1) {
+          qtyInput.value = +qtyInput.value - 1;
+          // handler(+qtyWidget.dataset.index, -1, { mode: "add" });
+        }
+      });
+    qtyWidget.querySelector("[data-add-qty]").addEventListener("click", () => {
+      if (+qtyInput.value + 1 <= 20) {
+        qtyInput.value = +qtyInput.value + 1;
+        // handler(+qtyWidget.dataset.index, 1, { mode: "add" });
+      }
+    });
+    qtyInput.addEventListener("input", (ev) => {
+      ev.target.value = ev.target.value.replace(/[^\d]/g, "");
+      if (+ev.target.value >= 20) {
+        ev.target.value = 20;
+      } else {
+        ev.target.value = +ev.target.value;
+      }
+    });
+    qtyInput.addEventListener("change", (ev) => {
+      if (+ev.target.value <= 0) {
+        ev.target.value = 1;
+      }
+      // handler(+qtyWidget.dataset.index, +ev.target.value, { mode: "set" });
+    });
+  }
+
+  fillProductModal(product, randomImgNum) {
+    const modal = this.#getElement('[data-dialog="product"]');
+    modal.dataset.randomImageNum = randomImgNum;
+    modal.dataset.productId = product["ITEM CODE"];
+    const qtyWidget = modal.querySelector("[data-qty-widget]");
+    const qtyInput = qtyWidget.querySelector("[data-product-qty-input]");
+    qtyInput.value = 1;
+
+    const img = modal.querySelector("img");
+    img.src = this.imagePath(`./products/${randomImgNum}.jpg`);
     this.#getElement("[data-product-name]").textContent =
       product["DESCRIPTION"];
+
     const price = this.#getElement("[data-price]");
     if (product.PRICE[0] === product.PRICE.at(-1)) {
       price.textContent = `R${product.PRICE[0]}`;
     } else {
       price.textContent = `R${product.PRICE[0]} - R${product.PRICE.at(-1)}`;
     }
+
+    const sizeList = modal.querySelector("[data-size-list]");
+    const colourList = modal.querySelector("[data-colour-list]");
+
+    if (product["SIZE"][0] !== "null") {
+      this.#getElement("[data-sizes-input]").hidden = false;
+      this.#getElement("[data-sizes-input]").dataset.hidden = false;
+
+      sizeList.replaceChildren();
+      sizeList.append(
+        ...[...product["SIZE"]].map((size) =>
+          this.#createElement("div", { dataset: { size: size }, text: size })
+        )
+      );
+    } else {
+      sizeList.replaceChildren();
+      this.#getElement("[data-sizes-input]").hidden = true;
+      this.#getElement("[data-sizes-input]").dataset.hidden = true;
+    }
+
+    if (product["COLOUR"][0] !== "null") {
+      this.#getElement("[data-colors-input]").hidden = false;
+      this.#getElement("[data-colors-input]").dataset.hidden = false;
+
+      colourList.replaceChildren();
+      colourList.append(
+        ...[...product["COLOUR"]].map((colour, idx) =>
+          this.#createElement("div", {
+            dataset: {
+              colour: colour,
+              hexColour: product["randomColours"][idx],
+            },
+            styles: { backgroundColor: product["randomColours"][idx] },
+          })
+        )
+      );
+    } else {
+      colourList.replaceChildren();
+      this.#getElement("[data-colors-input]").hidden = true;
+      this.#getElement("[data-colors-input]").dataset.hidden = true;
+    }
   }
 
   bindReqProduct(handler) {
     const products = this.#getAllElements("[data-product]");
-    const productModal = this.#getElement("[data-drawer='product']");
+    const productModal = this.#getElement("[data-dialog='product']");
     products.forEach((product) => {
       product.querySelector("img").addEventListener("click", () => {
-        handler(product.dataset.id);
+        // handler({
+        //   id: product.dataset.id,
+        //   colour: productModal.querySelector(".inputs .colour-list .selected"),
+        //   size: productModal.querySelector(".inputs .size-list .selected"),
+        // });
+        handler(product.dataset.id, product.dataset.randomImgNum);
         productModal.show();
       });
       product.querySelector("h2").addEventListener("click", () => {
-        handler(product.dataset.id);
+        // handler({
+        //   id: product.dataset.id,
+        //   colour: productModal.querySelector(".inputs .colour-list .selected"),
+        //   size: productModal.querySelector(".inputs .size-list .selected"),
+        // });
+        handler(product.dataset.id, product.dataset.randomImgNum);
         productModal.show();
       });
     });
@@ -496,6 +696,18 @@ export default class View {
   // products
 
   // filters
+  emptyFilterInputs() {
+    const searchControls = this.#getElement("[data-search-controls]");
+    const searchbarInput = searchControls.querySelector(".searchbar-input");
+    const filterGroup = this.#getElement("[data-filter-group]");
+    [...filterGroup.children].forEach((child) => child.hide());
+    const inputs = filterGroup.querySelectorAll("input[type='checkbox']");
+    inputs.forEach((input) => (input.checked = false));
+    searchbarInput.value = "";
+    this.#getElement("[data-load-more]").classList.remove("visible");
+    this.#getElement("[data-filter-count]").textContent = 0;
+  }
+
   updateFilterInputs(filter) {
     const searchControls = this.#getElement("[data-search-controls]");
     const searchbarInput = searchControls.querySelector(".searchbar-input");
@@ -645,5 +857,485 @@ export default class View {
   // filters
 
   // cart
+
+  #createCartItem(item) {
+    const cartItem = this.#createElement("article", {
+      className: "cart-item",
+      dataset: { productId: item.id, index: item.index },
+    });
+
+    const wrapper = this.#createElement("div");
+
+    const removeIcon = this.#createElement("i", {
+      className: "fas fa-trash remove-cart-item",
+    });
+    const removeBtn = this.#createElement("button", {
+      dataset: { removeCartItem: "", index: item.index },
+      className: "button",
+    });
+    removeBtn.append(removeIcon);
+
+    const img = this.#createElement("img");
+    img.src = this.imagePath(`./products/${item.randomImgNum}.jpg`);
+
+    const hgroup = this.#createElement("hgroup");
+    const title = this.#createElement("h2", {
+      text: item.description,
+    });
+    const price = this.#createElement("p", {
+      text: `R${item.price}`,
+    });
+    hgroup.append(title, price);
+
+    const inputWrapper = this.#createElement("div", {
+      className: "input-wrapper",
+    });
+
+    // const colorPopup = this.#createElement("sl-popup", {
+    //   className: "color-popup",
+    //   attributes: {
+    //     placement: "top",
+    //     arrow: true,
+    //     arrowPlacement: "anchor",
+    //     distance: 8,
+    //     shift: true,
+    //   },
+    // });
+
+    const colorPicker = this.#createElement("sl-color-picker", {
+      attributes: {
+        hoist: true,
+        noFormatToggle: true,
+        swatches: item["randomColours"],
+        value: item["currRandomClr"],
+      },
+      dataset: { initialClr: item["currRandomClr"], index: item["index"] },
+    });
+    colorPicker.style.setProperty("--swatch-size", "30px");
+    colorPicker.updateComplete.then(() => {
+      colorPicker.shadowRoot.querySelector(
+        ".color-picker__grid"
+      ).style.display = "none";
+      colorPicker.shadowRoot.querySelector(
+        ".color-picker__controls"
+      ).style.display = "none";
+      colorPicker.shadowRoot.querySelector(
+        ".color-picker__user-input"
+      ).style.display = "none";
+      colorPicker.shadowRoot
+        .querySelectorAll(".color-picker__swatch")
+        .forEach((swatch) => {
+          swatch.addEventListener("click", () => {
+            colorPicker.blur();
+            // colorPicker.shadowRoot.querySelector(
+            //   ".color-dropdown"
+            // ).open = false;
+          });
+        });
+    });
+    // colorBtn.addEventListener("click", () => {
+    //   colorPopup.active = colorPopup.active ? false : true;
+    // });
+
+    // colorBtn.addEventListener(
+    //   "blur",
+    //   (ev) => {
+    //     colorPopup.active = false;
+    //     console.log(ev.target);
+    //   },
+    //   false
+    // );
+    // colorPopup.append(colorBtn, box);
+
+    // colorPopup.updateComplete.then(() => {
+    //  colorPopup.addEventListener('sl-reposition', () => {
+    //   colorPopup.active = false;
+    // })
+    // });
+
+    const sizeSelect = this.#createElement("sl-select", {
+      dataset: { initialSize: item["currSize"], index: item["index"] },
+    });
+    const options = [...item.allSizes].map((size) =>
+      this.#createElement("sl-option", {
+        text: size,
+        attributes: { value: size },
+      })
+    );
+
+    sizeSelect.updateComplete.then(() => {
+      sizeSelect.append(...options);
+
+      // sizeSelect.value =
+      // const listbox = sizeSelect.shadowRoot.querySelector(".select__listbox");
+      const displayInput = sizeSelect.shadowRoot.querySelector(
+        ".select__display-input"
+      );
+      displayInput.value = item.currSize;
+
+      sizeSelect.addEventListener("sl-input", (ev) => {
+        displayInput.value = ev.target.value;
+      });
+      // listbox.addEventListener("click", (ev) => {
+      //   sizeSelect.shadowRoot.querySelector(".select__display-input").value =
+      //     ev.target.value;
+      // });
+    });
+
+    if (item["currColour"]) {
+      inputWrapper.append(colorPicker);
+    }
+    if (item["currSize"]) {
+      inputWrapper.append(sizeSelect);
+    }
+    // inputWrapper.append(colorPopup, sizeSelect);
+    //  <sl-popup class="add-to-cart-popup" placement="top" arrow arrow-placement="anchor" distance="8">
+    //       <button
+    //         slot="anchor"
+    //         class="button"
+    //         data-variant="add-to-cart"
+    //         data-add-to-cart
+    //       >
+    //         Add to cart
+    //       </button>
+    //       <div class="box">Please select a colour/size</div>
+    //     </sl-popup>
+
+    const qtyWidget = this.#createElement("div", {
+      dataset: { qtyWidget: "", index: item["index"] },
+    });
+    const minusBtn = this.#createElement("button", {
+      dataset: { removeQty: "" },
+      text: "-",
+      className: "button",
+    });
+    const plusBtn = this.#createElement("button", {
+      dataset: { addQty: "" },
+      text: "+",
+      className: "button",
+    });
+    // const labelForQty = this.#createElement("label", { text: "Qty:" });
+    const cartItemQty = this.#createElement("input", {
+      attributes: {
+        type: "text",
+        maxLength: 2,
+        value: item.qty,
+        inputMode: "numeric",
+      },
+    });
+    qtyWidget.append(minusBtn, cartItemQty, plusBtn);
+
+    wrapper.append(hgroup, inputWrapper, qtyWidget);
+
+    cartItem.append(img, wrapper, removeBtn);
+    return cartItem;
+  }
+
+  clearCartTotals() {
+    this.#getElement("[data-cart-subtotal]").textContent = 0;
+    this.#getElement("[data-total-cart-items]").textContent = 0;
+  }
+
+  updateCartSubtotal(cart) {
+    const total = cart.reduce(
+      (total, item) =>
+        parseFloat((total = +total + item.qty * item.price)).toFixed(2),
+      0
+    );
+    this.#getElement("[data-cart-subtotal]").textContent = total;
+  }
+
+  updateCartTotalItems(cart) {
+    const total = cart.reduce((total, item) => (total += item.qty), 0);
+    // this.#getElement("[data-total-cart-items]").textContent = total;
+    this.#getAllElements("[data-total-cart-items]").forEach((elem) => {
+      elem.textContent = total;
+    });
+    // this.#getElement(".item-modal-cart-items-total").textContent = total;
+    // this.#getElement(".header-total-cart-items").textContent = total;
+  }
+
+  #clearCart() {
+    this.#getElement("[data-cart-items]").replaceChildren();
+  }
+
+  displayCart(cart) {
+    const cartItems = this.#getElement("[data-cart-items]");
+    if (cartItems.children?.length > 0) this.#clearCart();
+    if (cart?.length > 0) {
+      cart.forEach((item) => {
+        cartItems.appendChild(this.#createCartItem(item));
+      });
+      this.updateCartSubtotal(cart);
+      this.updateCartTotalItems(cart);
+    } else {
+      cartItems.append(
+        this.#createElement("p", {
+          className: "empty-cart-text",
+          text: "No items in cart",
+        })
+      );
+    }
+  }
+
+  errorInvalidAddToCart(errorMsg) {
+    // const colourList = this.#getElement("[data-colour-list]");
+
+    const inputs = this.#getElement("[data-modal-inputs]");
+    const popup = this.#getElement(".add-to-cart-popup");
+    const box = popup.querySelector(".box");
+    box.textContent = errorMsg;
+    popup.active = true;
+    if (this.cartTimeoutID) {
+      clearTimeout(this.cartTimeoutID);
+    }
+    this.cartTimeoutID = setTimeout(() => {
+      popup.active = false;
+    }, 2000);
+    const visibleInputs = [...inputs.children].filter((child) => !child.hidden);
+    visibleInputs[0].scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  }
+
+  addToCartSuccess() {
+    const popup = this.#getElement(".add-to-cart-popup");
+    const box = popup.querySelector(".box");
+    box.textContent = "Item added to cart";
+    popup.active = true;
+    if (this.cartTimeoutID) {
+      clearTimeout(this.cartTimeoutID);
+    }
+    this.cartTimeoutID = setTimeout(() => {
+      popup.active = false;
+    }, 2000);
+  }
+
+  bindRemoveCartItem(handler) {
+    const modal = this.#getElement('[data-dialog="cart"]');
+    const btns = modal.querySelectorAll("[data-remove-cart-item]");
+    [...btns].forEach((btn) => {
+      btn.addEventListener("click", (ev) => {
+        handler(+ev.target.dataset.index);
+      });
+    });
+  }
+
+  #mapCartInputsToChanges() {
+    const modal = this.#getElement('[data-dialog="cart"]');
+    const items = modal.querySelectorAll(".cart-item");
+    let editedItems = [...items].filter((item) => {
+      if (item.querySelector("[data-edited='true']")) {
+        return item;
+      }
+    });
+    let mappedChanges = [...editedItems].map((item) => {
+      let obj = { index: item.dataset.index };
+      if (item.querySelector('sl-color-picker[data-edited="true"]')) {
+        obj.colour = item.querySelector("sl-color-picker").value;
+      }
+      if (item.querySelector('sl-select[data-edited="true"]')) {
+        obj.size = item.querySelector("sl-select").value;
+      }
+      return obj;
+    });
+    return mappedChanges;
+  }
+
+  #shouldUpdateCart() {
+    const modal = this.#getElement('[data-dialog="cart"]');
+    const sizeInputs = modal.querySelectorAll("sl-select");
+    const colorPickers = modal.querySelectorAll("sl-color-picker");
+    const hasEditedSize = [...sizeInputs].some(
+      (input) => input.dataset.edited === "true"
+    );
+
+    const hasEditedColour = [...colorPickers].some(
+      (picker) => picker.dataset.edited === "true"
+    );
+
+    if (hasEditedSize || hasEditedColour) {
+      return true;
+    }
+    return false;
+  }
+
+  bindUpdateCartItems(handler) {
+    this.#getElement("[data-update-cart]").addEventListener("click", () => {
+      handler(this.#mapCartInputsToChanges());
+      this.#getElement("[data-update-cart]").classList.remove("visible");
+    });
+
+    // this.#mapCartInputsToChanges();
+    //  const editedColours = [...colorPickers].filter(
+    //     (input) => input.dataset.edited === "true"
+    //   );
+    //   const editedSizes = [...sizeInputs].filter(
+    //     (input) => input.dataset.edited === "true"
+    //   );
+  }
+
+  bindEditCartItems() {
+    const modal = this.#getElement('[data-dialog="cart"]');
+    const sizeInputs = modal.querySelectorAll("sl-select");
+    const colorPickers = modal.querySelectorAll("sl-color-picker");
+
+    this.#getElement("[data-update-cart]").classList.remove("visible");
+
+    colorPickers.forEach((picker) => {
+      picker.addEventListener("sl-change", (ev) => {
+        if (ev.target.dataset.initialClr !== ev.target.value) {
+          ev.target.dataset.edited = true;
+        } else if (ev.target.dataset.initialClr === ev.target.value) {
+          ev.target.dataset.edited = false;
+        }
+
+        if (this.#shouldUpdateCart()) {
+          this.#getElement("[data-update-cart]").classList.add("visible");
+        } else {
+          this.#getElement("[data-update-cart]").classList.remove("visible");
+        }
+      });
+    });
+
+    sizeInputs.forEach((input) => {
+      input.addEventListener("sl-change", (ev) => {
+        if (ev.target.dataset.initialSize !== ev.target.value) {
+          ev.target.dataset.edited = true;
+        } else if (ev.target.dataset.initialSize === ev.target.value) {
+          ev.target.dataset.edited = false;
+        }
+
+        if (this.#shouldUpdateCart()) {
+          this.#getElement("[data-update-cart]").classList.add("visible");
+        } else {
+          this.#getElement("[data-update-cart]").classList.remove("visible");
+        }
+      });
+    });
+    // console.log(sizeInputs)
+
+    // const updateCartBtn = this.#getElement("[data-update-cart]");
+    // updateCartBtn.addEventListener("click", () => {
+    // handler();
+    // });
+  }
+
+  bindUpdateCartItemQty(handler) {
+    // console.log("hi");
+    const modal = this.#getElement('[data-dialog="cart"]');
+    const widgets = modal.querySelectorAll("[data-qty-widget]");
+    widgets.forEach((widget) => {
+      const input = widget.querySelector("input");
+      widget
+        .querySelector("[data-remove-qty]")
+        .addEventListener("click", () => {
+          if (+input.value - 1 >= 1) {
+            input.value = +input.value - 1;
+            handler(+widget.dataset.index, -1, { mode: "add" });
+          }
+        });
+      widget.querySelector("[data-add-qty]").addEventListener("click", () => {
+        if (+input.value + 1 <= 20) {
+          input.value = +input.value + 1;
+
+          handler(+widget.dataset.index, 1, { mode: "add" });
+        }
+      });
+      input.addEventListener("input", (ev) => {
+        ev.target.value = ev.target.value.replace(/[^\d]/g, "");
+        if (+ev.target.value >= 20) {
+          ev.target.value = 20;
+        } else {
+          ev.target.value = +ev.target.value;
+        }
+      });
+      input.addEventListener("change", (ev) => {
+        if (+ev.target.value <= 0) {
+          ev.target.value = 1;
+        }
+        handler(+widget.dataset.index, +ev.target.value, { mode: "set" });
+      });
+    });
+  }
+
+  createCartItemHandler(handler) {
+    const modal = this.#getElement('[data-dialog="product"]');
+
+    const colourList = this.#getElement("[data-colour-list]");
+    const sizeList = this.#getElement("[data-size-list]");
+
+    const sizesInput = this.#getElement("[data-sizes-input]");
+    const colorsInput = this.#getElement("[data-colors-input]");
+    handler(
+      modal.dataset.productId,
+      +modal.querySelector("[data-product-qty-input]").value,
+      modal.querySelector("hgroup>h1").textContent,
+      sizesInput.hidden
+        ? null
+        : sizeList.querySelector(".selected")?.dataset?.size,
+      colorsInput.hidden
+        ? null
+        : colourList.querySelector(".selected")?.dataset?.colour,
+      modal.dataset.randomImageNum,
+      colorsInput.hidden
+        ? null
+        : colourList.querySelector(".selected")?.dataset?.hexColour
+    );
+  }
+
+  bindCreateCartItem(handler) {
+    // const modal = this.#getElement('[data-dialog="product"]');
+    // const qtyWidget = modal.querySelector("[data-qty-widget]");
+    // const qtyInput = qtyWidget.querySelector("[data-product-qty-input]");
+
+    const colourList = this.#getElement("[data-colour-list]");
+    const sizeList = this.#getElement("[data-size-list]");
+
+    const sizesInput = this.#getElement("[data-sizes-input]");
+    const colorsInput = this.#getElement("[data-colors-input]");
+
+    // const popup = this
+    // .#getElement(".add-to-cart-popup");
+    // const box = popup.querySelector(".box");
+
+    this.#getElement("[data-add-to-cart]").addEventListener("click", () => {
+      if (sizesInput.hidden || colorsInput.hidden) {
+        if (sizesInput.hidden && colorsInput.hidden) {
+          this.createCartItemHandler(handler);
+        } else if (
+          sizeList.querySelector(".selected")?.dataset?.size ||
+          colourList.querySelector(".selected")?.dataset?.colour
+        ) {
+          this.createCartItemHandler(handler);
+        } else {
+          this.errorInvalidAddToCart("Please select a color/size");
+        }
+      } else {
+        if (
+          sizeList.querySelector(".selected")?.dataset?.size &&
+          colourList.querySelector(".selected")?.dataset?.colour
+        ) {
+          this.createCartItemHandler(handler);
+        } else {
+          this.errorInvalidAddToCart("Please select a color/size");
+        }
+      }
+    });
+  }
+
+  bindClearCart(handler) {
+    const modal = this.#getElement('[data-dialog="empty-cart"]');
+    const emptyCartBtn = modal.querySelector("[data-empty-cart]");
+    const totalCartItems = this.#getAllElements("[data-total-cart-items]");
+    emptyCartBtn.addEventListener("click", () => {
+      handler();
+      totalCartItems.forEach((elem) => {
+        elem.textContent = 0;
+      });
+      this.#getElement("[data-cart-subtotal]").textContent = "0";
+    });
+  }
   // cart
 }

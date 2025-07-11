@@ -1,4 +1,29 @@
 /* contact */
+/* .label-on-left {
+    --label-width: 3.75rem;
+    --gap-width: 1rem;
+  }
+
+  .label-on-left + .label-on-left {
+    margin-top: var(--space-m);
+  }
+
+  .label-on-left::part(form-control) {
+    display: grid;
+    grid: auto / var(--label-width) 1fr;
+    gap: var(--space-3xs) var(--gap-width);
+    align-items: center;
+  }
+
+  .label-on-left::part(form-control-label) {
+    text-align: right;
+  }
+
+  .label-on-left::part(form-control-help-text) {
+    grid-column-start: 2;
+    font-size: var(--step--1);
+  } */
+
 .contact {
   background: var(--clr-light);
 }
@@ -16,6 +41,20 @@
   width: min(100%, 40ch);
 }
 
+.contact form .button {
+  background-color: var(--color-dark-950);
+  color: var(--color-light-50);
+  font-size: var(--step-1);
+  padding: var(--space-xs) var(--space-xl);
+
+
+  &:hover, &:focus {
+  background-color: var(--color-dark-800);
+
+
+  }
+}
+
 .contact form p {
   display: flex;
   flex-direction: column;
@@ -27,12 +66,14 @@
 
 .contact form label {
   font-weight: 700;
+  font-size: var(--step-2);
+
   /* font-size: var(--size-step-2); */
 }
 
 .contact form :is(input, textarea) {
   padding: var(--space-xs);
-  border: none;
+  border: 2px solid var(--color-light-200);
   border-radius: 0.5rem;
 }
 
@@ -73,8 +114,9 @@
   background-color: var(--clr-neutral-700);
 }
 
-.contact-form h2 {
-  font-size: 2rem;
+.contact h1 {
+  font-size: var(--step-6);
+
   text-align: center;
 }
 
@@ -112,6 +154,7 @@
   border: 2px solid rgb(201, 201, 201);
   /* padding: 0 1rem; */
 }
+
 
 /* .contact-form input {
   flex: 2;

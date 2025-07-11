@@ -32,11 +32,15 @@ import "./assets/stylesheets/about.css";
 import "./assets/stylesheets/contact.css";
 
 // Shoelace components
+import "@shoelace-style/shoelace/dist/themes/light.css";
+
 import "@shoelace-style/shoelace/dist/components/drawer/drawer.js";
 import "@shoelace-style/shoelace/dist/components/details/details.js";
 import "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
+// import '@shoelace-style/shoelace/dist/components/tag/tag.js';
 import "@shoelace-style/shoelace/dist/components/select/select.js";
 import "@shoelace-style/shoelace/dist/components/dropdown/dropdown.js";
+import "@shoelace-style/shoelace/dist/components/color-picker/color-picker.js";
 // import "@shoelace-style/shoelace/dist/components/tab-group/tab-group.js";
 import "@shoelace-style/shoelace/dist/components/popup/popup.js";
 import "@shoelace-style/shoelace/dist/components/icon/icon.js";
